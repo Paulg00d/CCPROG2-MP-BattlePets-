@@ -22,7 +22,16 @@ int main(){
 		printf("> ");
 		scanf("%d", &nChoice);
 
-		if (nChoice != 0)
+		if (nChoice != 0){
+			switch(nChoice){
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
+		}
 				
 	} while (nChoice != 0);
 	
