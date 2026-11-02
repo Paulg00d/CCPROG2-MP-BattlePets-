@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <BattlePetsFunctions.h>
+#include <BattlePetsFunctions.c>
 
 typedef struct {
 	char szPetName[37];
@@ -10,11 +12,10 @@ typedef struct {
 typedef struct {
 	char szPlayerName[37];
 	Pokepet szPokeRoster[3][3];
-}PlayerInfo;
+}PlayerInfo[2];
 
 
 int main(){
-	PlayerInfo Player1, Player2;
 	int nChoice;
 	
 	do {
@@ -36,6 +37,7 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
+					BattleMenu();
 					break;
 				case 2:
 					break;
