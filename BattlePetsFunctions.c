@@ -1,3 +1,22 @@
+void BattleMenu(){
+  int nChoice;
+  for (int i = 0; i < 2; i++){
+    printf("+------------------------------------+\n");
+	  printf("|             Player %d              |\n", i + 1);
+	  printf("+-----------+------------------------+\n");
+	  printf("|     1     |      <New Player>      |\n");
+	  printf("+-----------+------------------------+\n");
+	  printf("> ");
+    scanf("%d", &nChoice);
+
+    switch (nChoice){
+      case 1:
+        printf("Enter username: ");
+        scanf("%s", PlayerInfo[i].szPlayerName);
+        break;
+  }
+}
+
 int horizontal(int grid[][],int num){
   int temp=num,x,g,z;
   for(x=0;x<3;x++){
