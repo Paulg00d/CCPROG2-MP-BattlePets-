@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef char stUsername[37];
-
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
@@ -10,14 +8,13 @@ typedef struct {
 } PetList[60];
 
 typedef struct {
-	stUsername PlayerName;
-	Pokepet PokeRoster[3][3];
+	char szPlayerName[37];
+	Pokepet szPokeRoster[3][3];
 }PlayerInfo;
 
 
 int main(){
 	PlayerInfo Player1, Player2;
-	stPokepet PetList[60];
 	int nChoice;
 	
 	do {
