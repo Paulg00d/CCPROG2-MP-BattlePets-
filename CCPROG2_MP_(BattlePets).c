@@ -2,7 +2,12 @@
 #include <string.h>
 
 typedef char stUsername[37];
-typedef char stPokePet[37];
+
+typedef struct {
+	char szPetName[37];
+	char szElement[9];
+	char szDescription[114];
+} PetList[60];
 
 typedef struct {
 	stUsername PlayerName;
