@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
 	char szPlayerName[37];
-	Pokepet szPokeRoster[3][3];
+	Petlist szPokeRoster[3][3];
 }PlayerInfo[2];
 
 
