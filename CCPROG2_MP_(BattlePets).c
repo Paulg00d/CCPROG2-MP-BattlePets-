@@ -3,23 +3,23 @@
 #include <BattlePetsFunctions.h>
 #include <BattlePetsFunctions.c>
 
-typedef char szPokemonName[37];
-
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
 	char szDescription[114];
-} PetList[60];
+} PetList[60], Grid;
 
 typedef struct {
 	char szPlayerName[37];
-	szPokemonName szPokeRoster[3][3];
+	Grid szPokeRoster[3][3];
 }PlayerInfo[2];
 
 
 int main(){
 	FILE *fp;
 	int nChoice;
+
+	fp = fopen("competdium.txt", "r");
 	
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
