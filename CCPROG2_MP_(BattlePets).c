@@ -16,6 +16,7 @@ typedef struct {
 
 
 int main(){
+	FILE *fp;
 	int nChoice;
 	
 	do {
