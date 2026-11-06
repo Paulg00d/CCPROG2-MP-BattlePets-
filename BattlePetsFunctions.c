@@ -1,4 +1,5 @@
 void BattleMenu(){
+  FILE *fp;
   int nChoice;
   for (int i = 0; i < 2; i++){
 	  printf("+------------------------------------+\n");
@@ -6,6 +7,7 @@ void BattleMenu(){
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
+	  if((fp = fopen("players.txt", "r") != NULL))
 	  printf("> ");
 	  scanf("%d", &nChoice);
 
