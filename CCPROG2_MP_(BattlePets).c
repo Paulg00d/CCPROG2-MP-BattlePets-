@@ -3,6 +3,8 @@
 #include <BattlePetsFunctions.h>
 #include <BattlePetsFunctions.c>
 
+typedef char szPokemonName[37];
+
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
@@ -11,7 +13,7 @@ typedef struct {
 
 typedef struct {
 	char szPlayerName[37];
-	Petlist szPokeRoster[3][3];
+	szPokemonName szPokeRoster[3][3];
 }PlayerInfo[2];
 
 
