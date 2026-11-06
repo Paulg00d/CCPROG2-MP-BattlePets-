@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
 	char szPlayerName[37];
-	Grid szPokeRoster[3][3];
+	Grid PokeRoster[3][3];
 }PlayerInfo[2];
 
 
