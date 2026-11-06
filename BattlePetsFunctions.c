@@ -1,6 +1,7 @@
+//function called when the battle option in the main file is chosen
 void BattleMenu(){
   FILE *fp;
-  int nChoice;
+  int nChoice, nChoice2;
   int nPetCount = 0;
   char szPetOfChoice[37];
 
@@ -15,23 +16,21 @@ void BattleMenu(){
 	  scanf("%d", &nChoice);
 
       switch (nChoice){
-      	case 1:
-			for(int i = 0; i < 2; i++){
-        		printf("Enter username: ");
-        		scanf("%s", PlayerInfo[i].szPlayerName);
-				int nChoice2;
-				printf("+------------------------------------+\n");
-	  			printf("|   Time to choose your battle pets! |\n", i + 1);
-	  			printf("+-----------+------------------------+\n");
-	  			printf("|     1     |     Open Competdium    |\n");
-	  			printf("+-----------+------------------------+\n");
-	  			printf("|     2     |    Load saved roster   |\n");
-	  			printf("+-----------+------------------------+\n");
-				printf("> ");
-				scanf("%d", &nChoice2);
-				switch(nChoice2){
-					case 1:
-						fp = fopen("competdium.txt", "r");
+	  	case 1:
+        	printf("Enter username: ");
+        	scanf("%s", PlayerInfo[i].szPlayerName);
+			printf("+------------------------------------+\n");
+	  		printf("|  Time to choose your battle pets!  |\n", i + 1);
+	  		printf("+-----------+------------------------+\n");
+	  		printf("|     1     |     Open Competdium    |\n");
+	  		printf("+-----------+------------------------+\n");
+	  		printf("|     2     |    Load saved roster   |\n");
+	  		printf("+-----------+------------------------+\n");
+			printf("> ");
+			scanf("%d", &nChoice2);
+			
+			switch(nChoice2){
+				case 1: fp = fopen("competdium.txt", "r");
 						for(int j = 0; (fscanf(fp, "%s", PetList[j].szPetName)) == 1; i++){
 							fscanf(fp, "%s", PetList[j].szElement);
 							fscanf(fp, "%s", PetList[j].szDescription);
@@ -39,62 +38,82 @@ void BattleMenu(){
 						}
 
 						printf("+------------------------------------+\n");
-	  					printf("|            Competdium              |\n");
+  						printf("|            Competdium              |\n");
 	  					printf("+------------------------------------+\n");
 
 						for(int k = 0; k < nPetCount; k++)
 							printf("%d. %s\n", k + 1, PetList[k].szPetName);
-						printf("> ");
-						scanf("%s", szPetOfChoice);
-	  								
-					    break;
 							
-			} 
+						for(int l = 0; l < 3; l++){
+							for(int m = 0; m < 3; m++){
+								printf("> ");
+								scanf("%s", szPetOfChoice);
+								
+								for(int n = 0; n < 3; n++){
+									for(int o = 0; o < 3; o++){
+										while(strcmp(PlayerInfo[i].szPokeRoster[n][o], szPetOfChoice) == 0){
+											printf("Batte pet already selected, please try again.\n");
+											printf("> ");
+											scanf("%s", szPetOfChoice);
+										}
+									}
+								}
+								
+								PlayerInfo[i].szPokeRoster[l][m] = szPetOfChoice;
+							}
+						}
+						fclose(fp);	
+				  	  	break;
+				  	  
+				//case 2:
+						
+			}
+			
+			case 2: 
+		}
 				
         	break;
+  	}
+  	
+  	//battle(); function call
+  	
+}
 
-	/*
+int battle(ctype Player1[][],cType Player2[][],cType grid){
 	int i,g;
-    for(i=0;i<3;i++)
-    {
-        for(g=0;g<3;g++)
-        {
-    if(Player2[][].element=="Metal")
-    {
-       if(Player1[][].element=="Water"&&Player1[][].element=="Earth"&&Player1[][].element=="Electric")
-       {
+    for(i=0;i<3;i++){
+        for(g=0;g<3;g++){
+    		if(Player2[][].element=="Metal"){
+       			if(Player1[][].element=="Water"&&Player1[][].element=="Earth"&&Player1[][].element=="Electric"){
            
-       }
-    }
-    else if(Player2[][].element=="Fire")
-    {
+       			}
+    		}
+			else if(Player2[][].element=="Fire"){
         
-    }
-    else if(Player2[][].element=="Water")
-    {
+    		}
+    		else if(Player2[][].element=="Water"){
         
-    }
-     else if(Player2[][].element=="Air")
-    {
+    		}
+    		else if(Player2[][].element=="Air")
+    		{
         
-    }
-     else if(Player2[][].element=="Electric")
-    {
+    		}
+    		else if(Player2[][].element=="Electric")
+    		{
         
-    }
-     else if(Player2[][].element=="Ice")
-    {
+    		}
+    		else if(Player2[][].element=="Ice")
+    		{
         
-    }
-     else if(Player2[][].element=="Earth")
-    {
+    		}
+    		else if(Player2[][].element=="Earth")
+    		{
         
-    }
+    		}
         }
     }
-	not yet complete, to be connected to the rest of the function later on */
-  }
 }
+	
 
 int horizontal(int grid[][],int num){
   int temp=num,x,g,z;
