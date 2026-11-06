@@ -1,6 +1,8 @@
 void BattleMenu(){
   FILE *fp;
   int nChoice;
+  int nPetCount = 0;
+  char szPetOfChoice[37];
 
   for (int i = 0; i < 2; i++){
 	  printf("+------------------------------------+\n");
@@ -30,7 +32,22 @@ void BattleMenu(){
 				switch(nChoice2){
 					case 1:
 						fp = fopen("competdium.txt", "r");
-						for(int j = 0; j < 9; i++){
+						for(int j = 0; (fscanf(fp, "%s", PetList[j].szPetName)) == 1; i++){
+							fscanf(fp, "%s", PetList[j].szElement);
+							fscanf(fp, "%s", PetList[j].szDescription);
+							nPetCount++;
+						}
+
+						printf("+------------------------------------+\n");
+	  					printf("|            Competdium              |\n");
+	  					printf("+------------------------------------+\n");
+
+						for(int k = 0; k < nPetCount; k++)
+							printf("%d. %s\n", k + 1, PetList[k].szPetName);
+						printf("> ");
+						scanf("%s", szPetOfChoice);
+	  								
+					    break;
 							
 			} 
 				
