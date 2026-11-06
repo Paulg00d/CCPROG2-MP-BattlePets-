@@ -14,6 +14,47 @@ void BattleMenu(){
         	printf("Enter username: ");
         	scanf("%s", PlayerInfo[i].szPlayerName);
         	break;
+
+	/*
+	int i,g;
+    for(i=0;i<3;i++)
+    {
+        for(g=0;g<3;g++)
+        {
+    if(Player2[][].element=="Metal")
+    {
+       if(Player1[][].element=="Water"&&Player1[][].element=="Earth"&&Player1[][].element=="Electric")
+       {
+           
+       }
+    }
+    else if(Player2[][].element=="Fire")
+    {
+        
+    }
+    else if(Player2[][].element=="Water")
+    {
+        
+    }
+     else if(Player2[][].element=="Air")
+    {
+        
+    }
+     else if(Player2[][].element=="Electric")
+    {
+        
+    }
+     else if(Player2[][].element=="Ice")
+    {
+        
+    }
+     else if(Player2[][].element=="Earth")
+    {
+        
+    }
+        }
+    }
+	not yet complete, to be connected to the rest of the function later on */
   }
 }
 
