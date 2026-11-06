@@ -1,20 +1,39 @@
 void BattleMenu(){
   FILE *fp;
   int nChoice;
+
   for (int i = 0; i < 2; i++){
 	  printf("+------------------------------------+\n");
 	  printf("|             Player %d              |\n", i + 1);
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
-	  if((fp = fopen("players.txt", "r") != NULL))
+	  //if((fp = fopen("players.txt", "r") != NULL))   to be implemented when the presaved usernames thing has been figured out
 	  printf("> ");
 	  scanf("%d", &nChoice);
 
       switch (nChoice){
       	case 1:
-        	printf("Enter username: ");
-        	scanf("%s", PlayerInfo[i].szPlayerName);
+			for(int i = 0; i < 2; i++){
+        		printf("Enter username: ");
+        		scanf("%s", PlayerInfo[i].szPlayerName);
+				int nChoice2;
+				printf("+------------------------------------+\n");
+	  			printf("|   Time to choose your battle pets! |\n", i + 1);
+	  			printf("+-----------+------------------------+\n");
+	  			printf("|     1     |     Open Competdium    |\n");
+	  			printf("+-----------+------------------------+\n");
+	  			printf("|     2     |    Load saved roster   |\n");
+	  			printf("+-----------+------------------------+\n");
+				printf("> ");
+				scanf("%d", &nChoice2);
+				switch(nChoice2){
+					case 1:
+						fp = fopen("competdium.txt", "r");
+						for(int j = 0; j < 9; i++){
+							
+			} 
+				
         	break;
 
 	/*
