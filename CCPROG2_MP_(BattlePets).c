@@ -7,6 +7,8 @@ typedef struct {
 	char szPetName[37];
 	char szElement[9];
 	char szDescription[114];
+	int nMatchCount;
+	char cSpace;
 } PetList[60], Grid;
 
 typedef struct {
@@ -18,8 +20,6 @@ typedef struct {
 int main(){
 	FILE *fp;
 	int nChoice;
-
-	fp = fopen("competdium.txt", "r");
 	
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
@@ -36,7 +36,7 @@ int main(){
 		printf("+-----------+------------------------+\n");
 		printf("> ");
 		scanf("%d", &nChoice);
-
+		
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
@@ -48,8 +48,8 @@ int main(){
 					break;
 			}
 		}
-				
-	} while (nChoice != 0);
+	
+	}while(nChoice != 0);
 	
 	return 0;
 }
