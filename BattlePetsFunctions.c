@@ -5,7 +5,7 @@ void BattleMenu(){
   int nPetCount = 0;
   char szPetOfChoice[37];
 
-  for (int i = 0; i < 2; i++){
+  for(int i = 0; i < 2; i++){
 	  printf("+------------------------------------+\n");
 	  printf("|             Player %d              |\n", i + 1);
 	  printf("+-----------+------------------------+\n");
@@ -31,9 +31,12 @@ void BattleMenu(){
 			
 			switch(nChoice2){
 				case 1: fp = fopen("competdium.txt", "r");
-						for(int j = 0; (fscanf(fp, "%s", PetList[j].szPetName)) == 1; i++){
+						int j = 0;
+						while(j < 60 && fscanf(fp, "%s", PetList[j].szPetName) == 1){
 							fscanf(fp, "%s", PetList[j].szElement);
-							fscanf(fp, "%s", PetList[j].szDescription);
+							fscanf(fp, "%[^\n]", PetList[j].szDescription);
+							fscanf(fp, "%d", &PetList[i].nMatchCount);
+							fscanf(fp, "%c", &PetList[i].cSpace);
 							nPetCount++;
 						}
 
@@ -41,32 +44,52 @@ void BattleMenu(){
   						printf("|            Competdium              |\n");
 	  					printf("+------------------------------------+\n");
 
-						for(int k = 0; k < nPetCount; k++)
-							printf("%d. %s\n", k + 1, PetList[k].szPetName);
+						for(int k = 0; k < nPetCount; k++){
+							printf("%d.\n", k + 1);
+							printf("Name: %s\n", PetList[k].szPetName);
+							printf("Element: %s", PetList[k].szElement);
+							printf("Description: %s", PetList[k].szDescription);
+							printf("\n");
+						}
+							
 							
 						for(int l = 0; l < 3; l++){
 							for(int m = 0; m < 3; m++){
 								printf("> ");
 								scanf("%s", szPetOfChoice);
+								int nPetFound = 0;
 								
-								for(int n = 0; n < 3; n++){
-									for(int o = 0; o < 3; o++){
-										while(strcmp(PlayerInfo[i].szPokeRoster[n][o], szPetOfChoice) == 0){
-											printf("Batte pet already selected, please try again.\n");
-											printf("> ");
-											scanf("%s", szPetOfChoice);
-										}
+								while(!nPetFound){
+									for(int n = 0; n < nPetCount; n++)
+										if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
+											nPetFound = 1;
+									if(nPetFound == 0){
+										printf("Pet not found.\n");
+										printf("> ");
+										scanf("%s", szPetOfChoice);
 									}
 								}
 								
-								PlayerInfo[i].szPokeRoster[l][m] = szPetOfChoice;
+								
+								do{
+									int nIsSame;
+									for(int o = 0; o < 3; o++)
+										for(int p = 0; p < 3; p++)
+											if(strcmp(PlayerInfo[i].PokeRoster[o][p].szPetName, szPetOfChoice) == 0)
+												nIsSame = 1;
+											
+									if(nIsSame){
+										printf("This pet already exists in your roster.\n");
+										printf("> ");
+										scanf("%s", szPetOfChoice);
+									}
+									else
+										nIsFound = 0;	
+								}while(nIsSame);
 							}
 						}
 						fclose(fp);	
-				  	  	break;
-				  	  
-				//case 2:
-						
+				  	  	break;					
 			}
 			
 			case 2: 
