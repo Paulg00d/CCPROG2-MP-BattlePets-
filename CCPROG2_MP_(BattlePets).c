@@ -44,7 +44,7 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu(PetList, MAX_PETS);
+					BattleMenu(PetList, Player);
 					break;
 				case 2:
 					break;
