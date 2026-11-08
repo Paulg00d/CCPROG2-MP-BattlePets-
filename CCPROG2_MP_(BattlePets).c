@@ -2,14 +2,14 @@
 #include <string.h>
 #include <BattlePetsFunctions.h>
 #include <BattlePetsFunctions.c>
+#define MAX_PETS 60
 
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
 	char szDescription[114];
 	int nMatchCount;
-	char cSpace;
-} PetList[60], Grid;
+}Grid;
 
 typedef struct {
 	char szPlayerName[37];
@@ -20,6 +20,7 @@ typedef struct {
 int main(){
 	FILE *fp;
 	int nChoice;
+	Grid PetList[MAX_PETS];
 	
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
@@ -40,7 +41,7 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu();
+					BattleMenu(PetList, MAX_PETS);
 					break;
 				case 2:
 					break;
