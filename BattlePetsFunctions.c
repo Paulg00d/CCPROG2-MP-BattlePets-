@@ -1,11 +1,11 @@
 //function called when the battle option in the main file is chosen
-void BattleMenu(){
+void BattleMenu(Grid PetList[], int nMaxPetCount){
   FILE *fp;
   int nChoice, nChoice2;
   int nPetCount = 0;
   char szPetOfChoice[37];
 
-  for(int i = 0; i < 2; i++){
+  for(int nCurrentPlayer = 0; nCurrentPlayer < 2; nCurrentPlayer++){
 	  printf("+------------------------------------+\n");
 	  printf("|             Player %d              |\n", i + 1);
 	  printf("+-----------+------------------------+\n");
@@ -18,7 +18,7 @@ void BattleMenu(){
       switch (nChoice){
 	  	case 1:
         	printf("Enter username: ");
-        	scanf("%s", PlayerInfo[i].szPlayerName);
+        	scanf("%s", PlayerInfo[nCurrentPlayer].szPlayerName);
 			printf("+------------------------------------+\n");
 	  		printf("|  Time to choose your battle pets!  |\n", i + 1);
 	  		printf("+-----------+------------------------+\n");
@@ -30,16 +30,7 @@ void BattleMenu(){
 			scanf("%d", &nChoice2);
 			
 			switch(nChoice2){
-				case 1: fp = fopen("competdium.txt", "r");
-						int j = 0;
-						while(j < 60 && fscanf(fp, "%s", PetList[j].szPetName) == 1){
-							fscanf(fp, "%s", PetList[j].szElement);
-							fscanf(fp, "%[^\n]", PetList[j].szDescription);
-							fscanf(fp, "%d", &PetList[i].nMatchCount);
-							fscanf(fp, "%c", &PetList[i].cSpace);
-							nPetCount++;
-						}
-
+				case 1: Competdium(nCurrentPlayer, nChoice2);
 						printf("+------------------------------------+\n");
   						printf("|            Competdium              |\n");
 	  					printf("+------------------------------------+\n");
@@ -63,19 +54,18 @@ void BattleMenu(){
 									for(int n = 0; n < nPetCount; n++)
 										if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
 											nPetFound = 1;
-									if(nPetFound == 0){
+									if(!nPetFound){
 										printf("Pet not found.\n");
 										printf("> ");
 										scanf("%s", szPetOfChoice);
 									}
 								}
 								
-								
 								do{
 									int nIsSame;
 									for(int o = 0; o < 3; o++)
 										for(int p = 0; p < 3; p++)
-											if(strcmp(PlayerInfo[i].PokeRoster[o][p].szPetName, szPetOfChoice) == 0)
+											if(strcmp(PlayerInfo[nCurrentPlayer].PokeRoster[o][p].szPetName, szPetOfChoice) == 0)
 												nIsSame = 1;
 											
 									if(nIsSame){
@@ -84,13 +74,19 @@ void BattleMenu(){
 										scanf("%s", szPetOfChoice);
 									}
 									else
-										nIsFound = 0;	
+										nIsSame = 0;	
+										strcpy(PlayerInfo[nCurrentPlayer].PokeRoster[o][p].szPetName, szPetOfChoice);
 								}while(nIsSame);
 							}
 						}
+						
 						fclose(fp);	
-				  	  	break;					
+				  	  	break;		
+							
+				case 2: Competdium(nCurrentPlayer, nChoice2);
+						break;
 			}
+			
 			
 			case 2: 
 		}
@@ -102,6 +98,69 @@ void BattleMenu(){
   	
 }
 
+
+void Competdium(int nCurrentPlayer, int nChoice){
+    FILE *fp;
+    int nPetCount = 0, i = 0;
+    
+    fp=fopen("competdium.txt","r");
+    
+    while(fscanf(fp, "%s", PetList[i].szPetName) == 1){
+		fscanf((fp,"%s %s %d", PetList[i].szElement, PetList[i].szDescription, &PetList[i].nMatchCount) == 3);
+		nPetCount++;
+		i++;
+    }
+    
+    switch(nChoice){
+    	case 1: printf("+------------------------------------+\n");
+  				printf("|            Competdium              |\n");
+	  			printf("+------------------------------------+\n");
+
+				for(int k = 0; k < nPetCount; k++){
+					printf("%d.\n", k + 1);
+					printf("Name: %s\n", PetList[k].szPetName);
+					printf("Element: %s", PetList[k].szElement);
+					printf("Description: %s", PetList[k].szDescription);
+					printf("\n");
+				}
+				break;
+				
+		case 2: LoadRoster(nCurrentPlayer);
+	}
+}
+
+void LoadRoster(int nCurrentPlayer){
+	FILE *fp = fopen("roster.txt","r");//this is not the final
+    
+    for(int j = 0; j < 3; j++)
+    	for(int k = 0; k < 3; k++)
+	    	fscanf(fp,"%s", Player[nCurrentPlayer].PokeRoster[j][k].szPetName);
+    
+    fclose(fp);
+    
+    int nIsSame;
+    
+    for(int l = 0; l < 3; l++){
+    	for(int m = 0; m < 3; m++){
+    		nIsSame = 0;
+        	for(int n = 0; n < nPetCount; n++){
+        		if(strcmp(Player[nCurrentPlayer].PokeRoster[l][m].szPetName, PetList[n].szPetName) == 0){
+        			strcpy(Player[nCurrentPlayer].PokeRoster[l][m].szElement, PetList[n].szElement);
+        			nIsSame = 1;
+				}
+			}
+			if(!nIsSame){
+				printf("Ohhhh we got a newcomer here! Time to give it an element!\n");
+				printf("> ");
+				scanf("%s", Player[nCurrentPlayer].PokeRoster[l][m].szElement);
+			}
+		}
+	}
+}
+
+
+
+/*
 int battle(ctype Player1[][],cType Player2[][],cType grid){
 	int i,g;
     for(i=0;i<3;i++){
@@ -192,5 +251,4 @@ int diagonal(int grid[][],int num){
   
   return 0;
 }
-
-
+*/
