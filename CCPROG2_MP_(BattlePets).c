@@ -3,24 +3,27 @@
 #include <BattlePetsFunctions.h>
 #include <BattlePetsFunctions.c>
 #define MAX_PETS 60
+#define PLAYER_COUNT 2
+
 
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
 	char szDescription[114];
 	int nMatchCount;
-}Grid;
+}Roster, Grid;
 
 typedef struct {
 	char szPlayerName[37];
-	Grid PokeRoster[3][3];
-}PlayerInfo[2];
+	Roster PokeRoster[3][3];
+}PlayerInfo;
 
 
 int main(){
 	FILE *fp;
 	int nChoice;
 	Grid PetList[MAX_PETS];
+	PlayerInfo Player[PLAYER_COUNT];
 	
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
