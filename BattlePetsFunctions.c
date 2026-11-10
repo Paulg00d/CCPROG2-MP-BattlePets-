@@ -1,5 +1,5 @@
 //function called when the battle option in the main file is chosen
-void BattleMenu(Grid PetList[], PlayerInfo Player[]){
+void BattleMenu(Grid *PetList[], PlayerInfo *Player[]){
   FILE *fp;
   int nChoice, nChoice2;
   int nPetCount = 0;
