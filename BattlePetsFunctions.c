@@ -30,7 +30,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 			scanf("%d", &nChoice2);
 			
 			switch(nChoice2){
-				case 1: Competdium(nCurrentPlayer, nChoice2);
+				case 1: Competdium(PetList, Player, nCurrentPlayer, nChoice2);
 						printf("+------------------------------------+\n");
   						printf("|            Competdium              |\n");
 	  					printf("+------------------------------------+\n");
@@ -99,7 +99,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 }
 
 
-void Competdium(int nCurrentPlayer, int nChoice){
+void Competdium(Grid PetList[], PlayerInfo Player[], int nCurrentPlayer, int nChoice){
     FILE *fp;
     int nPetCount = 0, i = 0;
     
@@ -125,11 +125,11 @@ void Competdium(int nCurrentPlayer, int nChoice){
 				}
 				break;
 				
-		case 2: LoadRoster(nCurrentPlayer);
+		case 2: LoadRoster(PetList, Player, nCurrentPlayer);
 	}
 }
 
-void LoadRoster(int nCurrentPlayer){
+void LoadRoster(Grid PetList[], PlayerInfo Player[], int nCurrentPlayer){
 	FILE *fp = fopen("roster.txt","r");//this is not the final
     
     for(int j = 0; j < 3; j++)
