@@ -18,7 +18,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
       switch (nChoice){
 	  	case 1:
         	printf("Enter username: ");
-        	scanf("%s", PlayerInfo[nCurrentPlayer].szPlayerName);
+        	scanf("%s", Player[nCurrentPlayer].szPlayerName);
 			printf("+------------------------------------+\n");
 	  		printf("|  Time to choose your battle pets!  |\n", i + 1);
 	  		printf("+-----------+------------------------+\n");
