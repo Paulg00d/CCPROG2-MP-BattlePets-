@@ -7,7 +7,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 
   for(int nCurrentPlayer = 0; nCurrentPlayer < 2; nCurrentPlayer++){
 	  printf("+------------------------------------+\n");
-	  printf("|             Player %d              |\n", i + 1);
+	  printf("|             Player %d              |\n", nCurrentPlayer + 1);
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
