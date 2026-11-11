@@ -3,8 +3,14 @@
 #include <BattlePetsFunctions.h>
 #include <BattlePetsFunctions.c>
 #define MAX_PETS 60
-#define PLAYER_COUNT 2
+#define MAX_PLAYERS 2
 
+/*
+typedef struct{
+	int nWinOrLose;
+	char cDraw = 'D';
+}FinalBattle;
+*/
 
 typedef struct {
 	char szPetName[37];
@@ -23,7 +29,7 @@ int main(){
 	FILE *fp;
 	int nChoice;
 	Grid PetList[MAX_PETS];
-	PlayerInfo Player[PLAYER_COUNT];
+	PlayerInfo Player[MAX_PLAYERS];
 	
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
@@ -44,7 +50,7 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu(&PetList, &Player);
+					BattleMenu(PetList, Player);
 					break;
 				case 2:
 					break;
