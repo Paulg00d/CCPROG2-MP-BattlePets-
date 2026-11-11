@@ -135,9 +135,7 @@ void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
 	}
 }
 
-
-
-
+/*
 void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
 	//FinalBattle BattleGrid[3][3];
 	int i,g;
@@ -173,7 +171,7 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
         }
     }
 }
-	
+*/
 
 int horizontal(int grid[][],int num){
   int temp=num,x,g,z;
