@@ -49,33 +49,30 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 						
 					for(int l = 0; l < 3; l++){
 						for(int m = 0; m < 3; m++){
-							printf("> ");
-							scanf("%s", szPetOfChoice);
-							int nPetFound = 0;
-								
-							while(!nPetFound){
-								for(int n = 0; n < nPetCount; n++)
-									if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
-										nPetFound = 1;
-								if(!nPetFound){
-									printf("Pet not found.\n");
-									printf("> ");
-									scanf("%s", szPetOfChoice);
-								}
-							}
-								
 							do{
+								printf("> ");
+								scanf("%s", szPetOfChoice);
+								int nPetFound = 0;
+								
+								while(!nPetFound){
+									for(int n = 0; n < nPetCount; n++)
+										if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
+											nPetFound = 1;
+									if(!nPetFound){
+										printf("Pet not found.\n");
+										printf("> ");
+										scanf("%s", szPetOfChoice);
+									}
+								}
+								
 								int nIsSame;
 								for(int o = 0; o < 3; o++)
 									for(int p = 0; p < 3; p++)
 										if(strcmp(PlayerInfo[nCurrentPlayer].PokeRoster[o][p].szPetName, szPetOfChoice) == 0)
 											nIsSame = 1;
 											
-								if(nIsSame){
+								if(nIsSame)
 									printf("This pet already exists in your roster.\n");
-									printf("> ");
-									scanf("%s", szPetOfChoice);
-								}
 								else
 									nIsSame = 0;	
 									strcpy(PlayerInfo[nCurrentPlayer].PokeRoster[l][m].szPetName, szPetOfChoice);
@@ -135,43 +132,189 @@ void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
 	}
 }
 
-/*
+
 void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
-	//FinalBattle BattleGrid[3][3];
+	int BattleGrid[3][3];
+	
 	int i,g;
-    for(i=0;i<3;i++){
-        for(g=0;g<3;g++){
-    		if(Player2[][].element=="Metal"){
-       			if(Player1[][].element=="Water"&&Player1[][].element=="Earth"&&Player1[][].element=="Electric"){
-           
-       			}
-    		}
-			else if(Player2[][].element=="Fire"){
-        
-    		}
-    		else if(Player2[][].element=="Water"){
-        
-    		}
-    		else if(Player2[][].element=="Air")
-    		{
-        
-    		}
-    		else if(Player2[][].element=="Electric")
-    		{
-        
-    		}
-    		else if(Player2[][].element=="Ice")
-    		{
-        
-    		}
-    		else if(Player2[][].element=="Earth")
-    		{
-        
-    		}
+    for(i = 0; i < 3; i++){
+        for(g = 0; g < 3; g++){
+    		if(strcmp(Player1Roster[i][g].szElement, "Fire") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 2;
+			}
+       			
+           else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+       		//THE CODE SEGMENTS FROM HERE BELOW ARE INCOMPLETE AND INCORRECT, NEED FIXING
+			else if(strcmp(Player1Roster[i][g].szElement, "Grass") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
+			
+			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+       				BattleGrid[i][g] = 0;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 2;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
+       				BattleGrid[i][g] = 1;
+			}
         }
     }
+    
+    //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
 }
-*/
+
 
 int horizontal(int grid[][],int num){
   int temp=num,x,g,z;
