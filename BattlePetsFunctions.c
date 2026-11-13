@@ -135,11 +135,12 @@ void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
 }
 
 
-void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], ){
+void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3],Player1name,Player2name){
 	int BattleGrid[3][3];
 	int Player1, Player2;
-	
 	int i,g;
+	int count1=0,count2=0;//Basically counts how many 1's or 2's are there
+	
     for(i = 0; i < 3; i++){
         for(g = 0; g < 3; g++){
     		if(strcmp(Player1Roster[i][g].szElement, "Fire") == 0){
@@ -223,7 +224,38 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], ){
 
 	if(Player1>Player2)
 	{
-		printf("Winner: %s (Player 1) [Lucky Win]", 
+		printf("Winner: %s (Player 1) [Lucky Win]", Player1name);
+	
+	}
+    else if(Player2>Player1)
+	{
+		printf("Winner: %s (Player 2) [Lucky Win]", Player2name);
+	
+	}
+	else
+	{
+	for(i=0;i<3;i++)
+		{
+			for(g=0;g<3;g++)
+				{
+					if(BattleGrid[i][g]==1)
+					{
+						count1+=1;
+					}
+					if(BattleGrid[i][g]==2)
+					{
+						count2+=1;
+					}
+				}
+		}
+		if(count1>count2)
+		{
+			printf(Winner: %s (Player 1) [Majority Win],Player1name);
+		}
+		else if(count1>count2)
+		{
+			printf(Winner: %s (Player 2) [Majority Win],Player2name);
+		}
 	}
     
     //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
@@ -240,46 +272,39 @@ void PrintMatchResults(int BattleGrid[][3]){
 */
 
 int horizontal(int grid[][],int num){
-  int temp=num,x,g,z;
-  for(x=0;x<3;x++){
-    z=0;
-    for(g=0;g<3;g++){
-      if(temp==grid[x][g]){
+  int temp=num,x,g,z=0,k=0;
+  for(x=0;x<3;x++)
+      if(grid[x][0] == num && grid[x][1] == num && grid[x][2] == num)
         z++;
-        if(z==3)
-          return 1;
-      }
-    }
-  }
   
-  return 0;
+  return z;
 }
 
 
 int vertical(int grid[][],int num){
-  int temp=num,x,g,z=0;
-  for(x=0;x<3;x++){
+  int temp=num,x=0,g,z=0,k=0;
+ 
     for(g=0;g<3;g++){
       if(temp==grid[g][x]){
         z++;
         if(z==3)
-          return 1;
+          k+=1;
       }
     }
-  }
-  return 0;
+  
+  return k;
 }
 
 
 int diagonal(int grid[][],int num){
-  int temp=num,x,g=0,z=0;
+  int temp=num,x,g=0,z=0,k=0;
     for(x=0;x<3:x++){
       if(temp==grid[x][g]){
         z++;
       }
       g++;
       if(z==3)
-        return num;
+        k+=1;
   }
 
   for(x=2;x>=0:x--){
@@ -288,9 +313,9 @@ int diagonal(int grid[][],int num){
     }
     g++;
     if(z==3)
-      return num;
+      k+=1;
   }
   
-  return 0;
+  return k;
 }
 */
