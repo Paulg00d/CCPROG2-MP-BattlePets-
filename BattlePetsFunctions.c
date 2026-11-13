@@ -140,174 +140,75 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
     for(i = 0; i < 3; i++){
         for(g = 0; g < 3; g++){
     		if(strcmp(Player1Roster[i][g].szElement, "Fire") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
+       			if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
+       				BattleGrid[i][g] = 1;
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 2;
 			}
        			
            else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
        		//THE CODE SEGMENTS FROM HERE BELOW ARE INCOMPLETE AND INCORRECT, NEED FIXING
 			else if(strcmp(Player1Roster[i][g].szElement, "Grass") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+       			if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
 			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+			else if(strcmp(Player1Roster[i][g].szElement, "Earth") == 0){
+       			if(strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
 			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+			else if(strcmp(Player1Roster[i][g].szElement, "Air") == 0){
+       			if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Water") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
 			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+			else if(strcmp(Player1Roster[i][g].szElement, "Electric") == 0){
+       			if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0 || strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
 			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+			else if(strcmp(Player1Roster[i][g].szElement, "Ice") == 0){
+       			if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
 			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
+			else if(strcmp(Player1Roster[i][g].szElement, "Metal") == 0){
+       			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
        				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
+    			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
        				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
+       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
        				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
-			}
-			
-			else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
-    			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
-       			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
 			}
         }
     }
