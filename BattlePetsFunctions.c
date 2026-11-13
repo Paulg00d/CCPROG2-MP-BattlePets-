@@ -36,7 +36,11 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 		scanf("%d", &nChoice2);
 		
 		switch(nChoice2){
-			case 1: Competdium(PetList, &nPetCount);
+			case 1: Competdium(nCurrentPlayer, &nPetCount);
+					LoadRoster(Player, &nPetCount);
+					break;
+			
+			case 2: Competdium(PetList, &nPetCount);
 					
 					printf("+------------------------------------+\n");
   					printf("|            Competdium              |\n");
@@ -82,16 +86,12 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 						}
 					}	
 			  	  	break;		
-							
-			case 2: Competdium(nCurrentPlayer, &nPetCount);
-					LoadRoster(Player, &nPetCount);
-					break;
 		}
   	}
   	
   	Battle(Player[0].PokeRoster, Player[1].PokeRoster);
 }
-//Gets the relevant information from competdium.txt and puts them 
+//Gets the relevant information from competdium.txt and puts them Grid struct
 void Competdium(Grid PetList[], int *nPetCount){
     FILE *fp;
     int i = 0;
@@ -135,8 +135,9 @@ void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
 }
 
 
-void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
+void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], ){
 	int BattleGrid[3][3];
+	int Player1, Player2;
 	
 	int i,g;
     for(i = 0; i < 3; i++){
@@ -215,7 +216,15 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
         }
     }
 
-	PrintMatchResults(BattleGrid);
+	//PrintMatchResults(BattleGrid);
+	Player1 = horizontal(BattleGrid, 1) + vertical(BattleGrid,1) +diagonal(BattleGrid,1);
+	Player2 = horizontal(BattleGrid, 2) + vertical(BattleGrid,2) +diagonal(BattleGrid,2);
+
+
+	if(Player1>Player2)
+	{
+		printf("Winner: %s (Player 1) [Lucky Win]", 
+	}
     
     //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
 }
