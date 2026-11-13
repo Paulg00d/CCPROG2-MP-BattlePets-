@@ -1,10 +1,11 @@
 //function called when the battle option in the main file is chosen
 void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   FILE *fp;
-  int nChoice, nChoice2;
+  int nChoice/*this variable stores the choice of the player in choosing a new or existing username*/, nChoice2/*this variable stores whether the player wants to load a saved roster or create a new roster*/;
   int nPetCount = 0;
   char szPetOfChoice[37];
 
+  //this for loop iterate between player 1 and player 2
   for(int nCurrentPlayer = 0; nCurrentPlayer < MAX_PLAYERS; nCurrentPlayer++){
 	  printf("+------------------------------------+\n");
 	  printf("|             Player %d              |\n", i + 1);
@@ -26,9 +27,10 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 		printf("+------------------------------------+\n");
 	  	printf("|  Time to choose your battle pets!  |\n", i + 1);
 	  	printf("+-----------+------------------------+\n");
-	  	printf("|     1     |     Open Competdium    |\n");
+	  	printf("|     1     |    Load saved roster   |\n");
 	  	printf("+-----------+------------------------+\n");
-	  	printf("|     2     |    Load saved roster   |\n");
+	  	printf("|     2     |    Create roster for   |\n");
+	  	printf("|           |       this match       |\n");
 	  	printf("+-----------+------------------------+\n");
 		printf("> ");
 		scanf("%d", &nChoice2);
@@ -89,7 +91,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   	
   	Battle(Player[0].PokeRoster, Player[1].PokeRoster);
 }
-
+//Gets the relevant information from competdium.txt and puts them 
 void Competdium(Grid PetList[], int *nPetCount){
     FILE *fp;
     int i = 0;
