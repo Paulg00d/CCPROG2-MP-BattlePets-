@@ -54,11 +54,11 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 								scanf("%s", szPetOfChoice);
 								int nPetFound = 0;
 								
-								while(!nPetFound){
+								while(nPetFound != 1){
 									for(int n = 0; n < nPetCount; n++)
 										if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
 											nPetFound = 1;
-									if(!nPetFound){
+									if(nPetFound == 0){
 										printf("Pet not found.\n");
 										printf("> ");
 										scanf("%s", szPetOfChoice);
