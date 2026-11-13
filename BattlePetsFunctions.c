@@ -12,7 +12,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
-	  //if((fp = fopen("players.txt", "r") != NULL))   to be implemented when the presaved usernames thing has been figured out
+	  //if((fp = fopen("players.txt", "r") == 1))   to be implemented when the presaved usernames thing has been figured out
 	  printf("> ");
 	  scanf("%d", &nChoice);
 
@@ -25,7 +25,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 	   }
 		
 		printf("+------------------------------------+\n");
-	  	printf("|  Time to choose your battle pets!  |\n", i + 1);
+	  	printf("|  Time to choose your battle pets!  |\n");
 	  	printf("+-----------+------------------------+\n");
 	  	printf("|     1     |    Load saved roster   |\n");
 	  	printf("+-----------+------------------------+\n");
@@ -36,8 +36,8 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 		scanf("%d", &nChoice2);
 		
 		switch(nChoice2){
-			case 1: Competdium(nCurrentPlayer, &nPetCount);
-					LoadRoster(Player, &nPetCount);
+			case 1: Competdium(PetList, &nPetCount);//loads the contents of Competdium into an array of structs called PetList
+					LoadRoster(PetList, Player, &nPetCount, nCurrentPlayer);//loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
 					break;
 			
 			case 2: Competdium(PetList, &nPetCount);
@@ -84,10 +84,11 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 									strcpy(PlayerInfo[nCurrentPlayer].PokeRoster[l][m].szPetName, szPetOfChoice);
 							}while(nIsSame);
 						}
-					}	
+					}
 			  	  	break;		
 		}
   	}
+  	
   	
   	Battle(Player[0].PokeRoster, Player[1].PokeRoster);
 }
@@ -105,8 +106,17 @@ void Competdium(Grid PetList[], int *nPetCount){
     }
 }
 
-void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
-	FILE *fp = fopen("roster.txt","r");//this is not the final
+//loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
+void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurrentPlayer){
+	char bar[35]; //string to stor the name of the txt file containing the saved roster
+	
+	printf("Please write here the name of the file.\nNote: Please include .txt after writing its name. (For example: cars.txt): ");
+    scanf("%s", bar);
+    
+    strcat(bar, ".txt");
+
+	
+	FILE *fp = fopen(bar,"r");
     
     for(int j = 0; j < 3; j++)
     	for(int k = 0; k < 3; k++)
@@ -135,7 +145,7 @@ void LoadRoster(PlayerInfo Player, int *nPetCount, int nCurrentPlayer){
 }
 
 
-void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3],Player1name,Player2name){
+void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], Player1name, Player2name){
 	int BattleGrid[3][3];
 	int Player1, Player2;
 	int i,g;
@@ -271,9 +281,9 @@ void PrintMatchResults(int BattleGrid[][3]){
 }
 */
 
-int horizontal(int grid[][],int num){
-  int temp=num,x,g,z=0,k=0;
-  for(x=0;x<3;x++)
+int horizontal(int grid[][], int num){
+  int x, z = 0;
+  for(x = 0; x < 3; x++)
       if(grid[x][0] == num && grid[x][1] == num && grid[x][2] == num)
         z++;
   
@@ -281,41 +291,25 @@ int horizontal(int grid[][],int num){
 }
 
 
-int vertical(int grid[][],int num){
-  int temp=num,x=0,g,z=0,k=0;
+int vertical(int grid[][], int num){
+  int x, z = 0;
  
-    for(g=0;g<3;g++){
-      if(temp==grid[g][x]){
+    for(x = 0; x < 3; x++)
+      if(grid[0][x] == num && grid[1][x] == num && grid[2][x])
         z++;
-        if(z==3)
-          k+=1;
-      }
-    }
   
-  return k;
+  return z;
 }
 
 
-int diagonal(int grid[][],int num){
-  int temp=num,x,g=0,z=0,k=0;
-    for(x=0;x<3:x++){
-      if(temp==grid[x][g]){
-        z++;
-      }
-      g++;
-      if(z==3)
-        k+=1;
-  }
-
-  for(x=2;x>=0:x--){
-    if(temp==grid[x][g]){
-      z++;
-    }
-    g++;
-    if(z==3)
-      k+=1;
-  }
+int diagonal(int grid[][], int num){
+  int z = 0;
   
-  return k;
+  if(grid[0][0] == num && grid[1][1] == num && grid[2][2] == num)
+  	z++;
+  	
+  if(grid[0][2] == num && grid[1][1] == num && grid[2][0] == num)
+  	z++;
+  
+  return z;
 }
-*/
