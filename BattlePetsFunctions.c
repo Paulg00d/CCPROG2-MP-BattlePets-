@@ -212,10 +212,21 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3]){
 			}
         }
     }
+
+	PrintMatchResults(BattleGrid);
     
     //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
 }
 
+/*
+void PrintMatchResults(int BattleGrid[][3]){
+	printf("+---+---+---+\n");
+	for(int i = 0; i < 3; i++)
+		for(int j = 0; j < 3; j++){
+			
+		}
+}
+*/
 
 int horizontal(int grid[][],int num){
   int temp=num,x,g,z;
