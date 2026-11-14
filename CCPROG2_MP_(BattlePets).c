@@ -1,36 +1,16 @@
 #include <stdio.h>
 #include <string.h>
-#include <BattlePetsFunctions.h>
-#include <BattlePetsFunctions.c>
-#define MAX_PETS 60
-#define MAX_PLAYERS 2
-
-/*
-typedef struct{
-	int nWinOrLose;
-	char cDraw = 'D';
-}FinalBattle;
-*/
-
-typedef struct {
-	char szPetName[37];
-	char szElement[9];
-	char szDescription[114];
-	int nMatchCount;
-}Roster, Grid;
-
-typedef struct {
-	char szPlayerName[37];
-	Roster PokeRoster[3][3];
-}PlayerInfo;
-
+#include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
+#define MAX_PETS 60//maximum pets PetList can accomodate
+#define MAX_PLAYERS 2//number of players
 
 int main(){
 	FILE *fp;
-	int nChoice;
-	Grid PetList[MAX_PETS];
-	PlayerInfo Player[MAX_PLAYERS];
+	int nChoice;//int variable to store the choice of the player
+	Grid PetList[MAX_PETS];//array of structs, with each struct containing relevant information of each pet
+	PlayerInfo Player[MAX_PLAYERS];//array of structs, with each struct containing the username and roster of the player
 	
+	//this do-while loop executes for as long as nChoice != 0
 	do {
 		printf("WELCOME TO BATTLEPETS!\n");
 		printf("+------------------------------------+\n");
@@ -47,6 +27,7 @@ int main(){
 		printf("> ");
 		scanf("%d", &nChoice);
 		
+		//this if statement executes whenevr nChoice != 0, or whenever the player chooses to exit
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
@@ -59,7 +40,7 @@ int main(){
 			}
 		}
 	
-	}while(nChoice != 0);
+	}while(nChoice != 0);//this loop exits when the player chooses to exit
 	
 	return 0;
 }
