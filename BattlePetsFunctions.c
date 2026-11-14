@@ -98,7 +98,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   	}
   	
   	
-  	Battle(Player[0].PokeRoster, Player[1].PokeRoster, Player[0].);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
+  	Battle(Player[0].PokeRoster, Player[1].PokeRoster, Player[0].szPlayerName, Player[1].szPlayerName);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
 }
 
 //Gets the relevant information from competdium.txt and puts them Grid struct
