@@ -1,7 +1,11 @@
-//function called when the battle option in the main file is chosen
+/*	The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
+	@param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+	@param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
+*/
 void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   FILE *fp;
-  int nChoice/*this variable stores the choice of the player in choosing a new or existing username*/, nChoice2/*this variable stores whether the player wants to load a saved roster or create a new roster*/;
+  int nChoice;/*this variable stores the choice of the player in choosing a new or existing username*/
+  int nChoice2;/*this variable stores whether the player wants to load a saved roster or create a new roster*/
   int nPetCount = 0;
   char szPetOfChoice[37];
 
@@ -101,21 +105,30 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   	Battle(Player[0].PokeRoster, Player[1].PokeRoster, Player[0].szPlayerName, Player[1].szPlayerName);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
 }
 
-//Gets the relevant information from competdium.txt and puts them Grid struct
+/*	The function Competdium gets the relevant information from competdium.txt and puts them int the PetList grid struct
+	@param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+	@param @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60) to be modified in the function
+*/
 void Competdium(Grid PetList[], int *nPetCount){
     FILE *fp;
     int i = 0;
     
-    fp = fopen("competdium.txt","r");
+    fp = fopen("competdium.txt","r");//opens the txt file competdium.txt to read all of its contents
     
+    //this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
     while(fscanf(fp, "%s", PetList[i].szPetName) == 1){
-		fscanf((fp,"%s %s %d", PetList[i].szElement, PetList[i].szDescription, &PetList[i].nMatchCount) == 3);
-		nPetCount++;//counts the number of pets received so far
-		i++;//index for the array PetList to store relevant information of the pokemon
+		fscanf((fp,"%s %s %d", PetList[i].szElement, PetList[i].szDescription, &PetList[i].nMatchCount) == 3); //reads all the other relevant information (element, description, match count)
+		nPetCount++;//increments every time all the information of a pet have been successfully read
+		i++;//index of the array PetList for each pet
     }
 }
 
-//loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
+/*	The function LoadRoster loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
+	@param PetList[] is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+	@param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
+	@param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60)
+	@param nCurrentPlayer is the index of the Player[] array of structs indicating the current player
+*/
 void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurrentPlayer){
 	char bar[35]; //string to stor the name of the txt file containing the saved roster
 	
@@ -128,16 +141,18 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
     strcat(bar, ".txt"); //catenates the string ".txt" to the end of the string contained in the string variable bar
 
 	
-	FILE *fp = fopen(bar,"r"); //opens the txt file bearing the same name as in bar to read its contents
+	FILE *fp = fopen(bar,"r"); //opens the txt file bearing the same name as bar to read its contents
     
+    //this for loop goes to each cell of the current player's grid
     for(int j = 0; j < 3; j++)
     	for(int k = 0; k < 3; k++)
-	    	fscanf(fp,"%s", Player[nCurrentPlayer].PokeRoster[j][k].szPetName); //puts the pet names of the txt file with the same name as bar into 
+	    	fscanf(fp,"%s", Player[nCurrentPlayer].PokeRoster[j][k].szPetName); //puts the pet names of the txt file with the same name as bar into each cell of the current player's grid
     
     fclose(fp);
     
-    int nIsSame;
+    int nIsSame;//flag to check if any of the pets in the player's saved roster is found in competdium. For each cell in the player's grid, it evaluates to 1 if it is found in competdium, and 0 if otherwise
     
+    //this for loop goes to each cell of the player's roster grid to check if the pet in the current cell is found in competdium or not
     for(int l = 0; l < 3; l++){
     	for(int m = 0; m < 3; m++){
     		nIsSame = 0;
@@ -159,128 +174,134 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 /*	The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
 	@param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
 	@param Player2Roster is the roster of Player 2 in the form of a 2d array of structs, where each struct stores the name and element of each player
+	@param Player1name is the username of player 1
+	@param Player2name is the username of player 2
 */
-void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], Player1name, Player2name){
-	int BattleGrid[3][3];
-	int Player1, Player2;
-	int i,g;
+void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name){
+	int BattleGrid[3][3];//an int array to display if one player won or if it is a tie in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - it is a draw)
+	int Player1/*an int variable to contain how many lucky wins player 1 has (e.g. 2 horizontal wins, 2 vertical wins)*/, Player2/*an int variable to contain how many lucky wins player 2 has (e.g. 2 horizontal wins, 2 vertical wins)*/;
+	int i, g;//int variables to go to each cell in each of the two player rosters and in BattleGrid[][]
 	int count1=0,count2=0;//Basically counts how many 1's or 2's are there
 	
+	//this for loop goes to each cell in player 1 and player 2's rosters and BattleGrid to assign a value to show who wins or if it is a draw
     for(i = 0; i < 3; i++){
         for(g = 0; g < 3; g++){
+        	//if statement to check if the element of player 1 in [i][g] is fire
     		if(strcmp(Player1Roster[i][g].szElement, "Fire") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-       			
-           else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
+       		//if statement to check if the element of player 1 in [i][g] is water
+            else if(strcmp(Player1Roster[i][g].szElement, "Water") == 0){
     			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-       		//THE CODE SEGMENTS FROM HERE BELOW ARE INCOMPLETE AND INCORRECT, NEED FIXING
+       		//if statement to check if the element of player 1 in [i][g] is grass
 			else if(strcmp(Player1Roster[i][g].szElement, "Grass") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-			
+			//if statement to check if the element of player 1 in [i][g] is earth
 			else if(strcmp(Player1Roster[i][g].szElement, "Earth") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-			
+			//if statement to check if the element of player 1 in [i][g] is air
 			else if(strcmp(Player1Roster[i][g].szElement, "Air") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Water") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-			
+			//if statement to check if the element of player 1 in [i][g] is electric
 			else if(strcmp(Player1Roster[i][g].szElement, "Electric") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Electric") == 0 || strcmp(Player2Roster[i][g].szElement, "Fire") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-			
+			//if statement to check if the element of player 1 in [i][g] is electric
 			else if(strcmp(Player1Roster[i][g].szElement, "Ice") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Metal") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Ice") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
-			
+			//if statement to check if the element of player 1 in [i][g] is electric
 			else if(strcmp(Player1Roster[i][g].szElement, "Metal") == 0){
        			if(strcmp(Player2Roster[i][g].szElement, "Fire") == 0 || strcmp(Player2Roster[i][g].szElement, "Air") == 0 || strcmp(Player2Roster[i][g].szElement, "Ice") == 0)
-       				BattleGrid[i][g] = 1;
+       				BattleGrid[i][g] = 1;//evaluates to 1 if player 1 wins against player 2 in cell [i][g]
     			else if(strcmp(Player2Roster[i][g].szElement, "Water") == 0 || strcmp(Player2Roster[i][g].szElement, "Earth") == 0 || strcmp(Player2Roster[i][g].szElement, "Electric") == 0)
-       				BattleGrid[i][g] = 2;
+       				BattleGrid[i][g] = 2;//evaluates to 2 if player 2 wins against player 1 in cell [i][g]
        			else if(strcmp(Player2Roster[i][g].szElement, "Metal") == 0 || strcmp(Player2Roster[i][g].szElement, "Grass") == 0)
-       				BattleGrid[i][g] = 0;
+       				BattleGrid[i][g] = 0;//evaluates to 0 if neither player 1 nor player 2 can win over the other
 			}
         }
     }
 
-	//PrintMatchResults(BattleGrid);
-	Player1 = horizontal(BattleGrid, 1) + vertical(BattleGrid,1) +diagonal(BattleGrid,1);
-	Player2 = horizontal(BattleGrid, 2) + vertical(BattleGrid,2) +diagonal(BattleGrid,2);
+	Player1 = Horizontal(BattleGrid, 1) + Vertical(BattleGrid, 1) + Diagonal(BattleGrid, 1);//Player1 calls the functions show to store how many lucky wins player 1 has
+	Player2 = Horizontal(BattleGrid, 2) + Vertical(BattleGrid, 2) + Diagonal(BattleGrid, 2);//Player2 calls the functions show to store how many lucky wins player 2 has
 
 
-	if(Player1>Player2)
+	if(Player1>Player2)//executes if player 1 has more lucky wins than player 2
 	{
 		printf("Winner: %s (Player 1) [Lucky Win]", Player1name);
 	
 	}
-    else if(Player2>Player1)
+    else if(Player2>Player1)//executes if player 2 has more lucky wins than player 1
 	{
 		printf("Winner: %s (Player 2) [Lucky Win]", Player2name);
 	
 	}
-	else
+	else//executes if neither player has any lucky wins or if both have the same number of lucky wins (e.g. both player 1 and player 2 have 1 horizontal win each)
 	{
+	//this for loop goes to each cell of BattleGrid to count how many 1's and/or 2's there are
 	for(i=0;i<3;i++)
 		{
 			for(g=0;g<3;g++)
 				{
 					if(BattleGrid[i][g]==1)
 					{
-						count1+=1;
+						count1+=1;//increments whenever 1 is in the cell [i][g]
 					}
 					if(BattleGrid[i][g]==2)
 					{
-						count2+=1;
+						count2+=1;//increments whenever 2 is in the cell [i][g]
 					}
 				}
 		}
-		if(count1>count2)
+		if(count1>count2)//executes if player 1 has more wins than player 2
 		{
-			printf(Winner: %s (Player 1) [Majority Win],Player1name);
+			printf("Winner: %s (Player 1) [Majority Win]", Player1name);
 		}
-		else if(count1>count2)
+		else if(count1>count2)//executes if player 2 has more wins than player 1
 		{
-			printf(Winner: %s (Player 2) [Majority Win],Player2name);
+			printf("Winner: %s (Player 2) [Majority Win]", Player2name);
 		}
+		else
+			printf("It is a draw")
 	}
     
     //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
@@ -296,7 +317,7 @@ void PrintMatchResults(int BattleGrid[][3]){
 }
 */
 
-int horizontal(int grid[][], int num){
+int Horizontal(int grid[][3], int num){
   int x, z = 0;
   for(x = 0; x < 3; x++)
       if(grid[x][0] == num && grid[x][1] == num && grid[x][2] == num)
@@ -306,7 +327,7 @@ int horizontal(int grid[][], int num){
 }
 
 
-int vertical(int grid[][], int num){
+int Vertical(int grid[][3], int num){
   int x, z = 0;
  
     for(x = 0; x < 3; x++)
@@ -317,7 +338,7 @@ int vertical(int grid[][], int num){
 }
 
 
-int diagonal(int grid[][], int num){
+int Diagonal(int grid[][3], int num){
   int z = 0;
   
   if(grid[0][0] == num && grid[1][1] == num && grid[2][2] == num)
