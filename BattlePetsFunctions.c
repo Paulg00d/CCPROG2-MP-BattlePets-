@@ -16,7 +16,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   //this for loop iterate between player 1 and player 2
   for(int nCurrentPlayer = 0; nCurrentPlayer < MAX_PLAYERS; nCurrentPlayer++){
 	  printf("+------------------------------------+\n");
-	  printf("|             Player %d              |\n", i + 1);
+	  printf("|             Player %d              |\n", nCurrentPlayer + 1);
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
