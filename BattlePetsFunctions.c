@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <string.h>
 #include "BattlePetsFunctions.h"
 
 /*	The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
