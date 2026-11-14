@@ -1,6 +1,9 @@
 #ifndef BATTLEPETSFUNCTIONS_H
 #define BATTLEPETSFUNCTIONS_H
 
+#define MAX_PETS 60//maximum pets PetList can accomodate
+#define MAX_PLAYERS 2//number of players
+
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
