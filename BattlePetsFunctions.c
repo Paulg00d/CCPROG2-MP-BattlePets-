@@ -98,7 +98,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   	}
   	
   	
-  	Battle(Player[0].PokeRoster, Player[1].PokeRoster);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
+  	Battle(Player[0].PokeRoster, Player[1].PokeRoster, Player[0].);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
 }
 
 //Gets the relevant information from competdium.txt and puts them Grid struct
@@ -156,7 +156,10 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 	}
 }
 
-
+/*	The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
+	@param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
+	@param Player2Roster is the roster of Player 2 in the form of a 2d array of structs, where each struct stores the name and element of each player
+*/
 void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], Player1name, Player2name){
 	int BattleGrid[3][3];
 	int Player1, Player2;
