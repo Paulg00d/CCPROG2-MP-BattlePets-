@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
-#define MAX_PETS 60//maximum pets PetList can accomodate
-#define MAX_PLAYERS 2//number of players
 
 int main(){
 	FILE *fp;
