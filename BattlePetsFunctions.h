@@ -1,3 +1,6 @@
+#ifndef BATTLEPETSFUNCTIONS_H
+#define BATTLEPETSFUNCTIONS_H
+
 typedef struct {
 	char szPetName[37];
 	char szElement[9];
@@ -17,3 +20,5 @@ int Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1na
 int Horizontal(int grid[][3], int num);
 int Vertical(int grid[][3], int num);
 int Diagonal(int grid[][3], int num);
+
+#endif
