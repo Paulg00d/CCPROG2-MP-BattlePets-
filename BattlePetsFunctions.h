@@ -1,19 +1,22 @@
 #ifndef BATTLEPETSFUNCTIONS_H
 #define BATTLEPETSFUNCTIONS_H
 
-#define MAX_PETS 60//maximum pets PetList can accomodate
-#define MAX_PLAYERS 2//number of players
-
+/**
+ * Stores information of each pet
+ */
 typedef struct {
-	char szPetName[37];
-	char szElement[9];
-	char szDescription[114];
-	int nMatchCount;
+	char szPetName[37]; //the name of the pet
+	char szElement[9]; //the element of the pet
+	char szDescription[114]; //the description of the pet
+	int nMatchCount; //the number of matches the pet partook in
 }Roster, Grid;
 
+/**
+ * Stores information of each player
+ */
 typedef struct {
-	char szPlayerName[37];
-	Roster PokeRoster[3][3];
+	char szPlayerName[37]; //the name of the player
+	Roster PokeRoster[3][3]; //the 3x3 roster of the player
 }PlayerInfo;
 
 void BattleMenu(Grid PetList[], PlayerInfo Player[]);
