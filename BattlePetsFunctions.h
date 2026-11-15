@@ -1,6 +1,10 @@
 #ifndef BATTLEPETSFUNCTIONS_H
 #define BATTLEPETSFUNCTIONS_H
 
+#define MAX_PETS 60//maximum pets PetList can accomodate
+#define PLAYERS 2//number of players
+#define MAX_PLAYERS 50//maximum number of players in 
+
 /**
  * Stores information of each pet
  */
