@@ -2,9 +2,11 @@
 #include <string.h>
 #include "BattlePetsFunctions.h"
 
-/*	The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
-	@param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
-	@param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
+/**
+* The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
+* @param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+* @param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
+* @pre <list of pre-conditions>
 */
 void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   FILE *fp;
@@ -112,9 +114,11 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 
 
 
-/*	The function Competdium gets the relevant information from competdium.txt and puts them int the PetList grid struct
-	@param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
-	@param @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60) to be modified in the function
+/**
+* The function Competdium gets the relevant information from competdium.txt and puts them int the PetList grid struct
+* @param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+* @param @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60) to be modified in the function
+* @pre <list of pre-conditions>
 */
 void Competdium(Grid PetList[], int *nPetCount){
     FILE/*error because no stdio.h*/ *fp;
@@ -132,11 +136,13 @@ void Competdium(Grid PetList[], int *nPetCount){
 
 
 
-/*	The function LoadRoster loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
-	@param PetList[] is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
-	@param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
-	@param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60)
-	@param nCurrentPlayer is the index of the Player[] array of structs indicating the current player
+/**
+* The function LoadRoster loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
+* @param PetList[] is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+* @param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
+* @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60)
+* @param nCurrentPlayer is the index of the Player[] array of structs indicating the current player
+* @pre *nPetCount and nCurrentPlayer both start at 0
 */
 void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurrentPlayer){
 	char bar[35]; //string to stor the name of the txt file containing the saved roster
@@ -182,11 +188,13 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 
 
 
-/*	The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
-	@param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
-	@param Player2Roster is the roster of Player 2 in the form of a 2d array of structs, where each struct stores the name and element of each player
-	@param Player1name is the username of player 1
-	@param Player2name is the username of player 2
+/**
+* The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
+* @param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
+* @param Player2Roster is the roster of Player 2 in the form of a 2d array of structs, where each struct stores the name and element of each player
+* @param Player1name is the username of player 1
+* @param Player2name is the username of player 2
+* @pre Player1Roster and Player2Roster already have the relevant pet information each, and Player1Name and Player2Name already contain the names of the players
 */
 void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name){
 	int BattleGrid[3][3];//an int array to display if one player won or if it is a tie in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - it is a draw)
@@ -330,10 +338,12 @@ void PrintMatchResults(int BattleGrid[][3]){
 
 
 
-/*	The function Horizontal checks how many horizontal lucky wins the player has.
-	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
-	@param num is the number that the function will check to see if it aligns horizontally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
-	@return the amount of horizontal wins
+/**
+* The function Horizontal checks how many horizontal lucky wins the player has.
+* @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+* @param num is the number that the function will check to see if it aligns horizontally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+* @return the amount of horizontal wins
+* @pre grid already stores the result of the battle between the two players
 */
 int Horizontal(int grid[][3], int num){
   int x, z = 0;
@@ -348,10 +358,12 @@ int Horizontal(int grid[][3], int num){
 
 
 
-/*	The function Vertical checks how many vertical lucky wins the player has.
-	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
-	@param num is the number that the function will check to see if it aligns vertically. The num variable changes depending on the player (1 for player 1, 2 for player 2)
-	@return the amount of vertical wins
+/**
+* The function Vertical checks how many vertical lucky wins the player has.
+* @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+* @param num is the number that the function will check to see if it aligns vertically. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+* @return the amount of vertical wins
+* @pre grid already stores the result of the battle between the two players
 */
 int Vertical(int grid[][3], int num){
   	int x, z = 0;
@@ -366,10 +378,12 @@ int Vertical(int grid[][3], int num){
 
 
 
-/*	The function Diagonal checks how many diagonal lucky wins the player has.
-	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
-	@param num is the number that the function will check to see if it aligns diagonally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
-	@return the amount of diagonal wins
+/**
+* The function Diagonal checks how many diagonal lucky wins the player has.
+* @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+* @param num is the number that the function will check to see if it aligns diagonally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+* @return the amount of diagonal wins
+* @pre grid already stores the result of the battle between the two players
 */
 int Diagonal(int grid[][3], int num){
 	int z = 0;
