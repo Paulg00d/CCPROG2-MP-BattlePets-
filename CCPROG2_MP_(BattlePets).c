@@ -63,6 +63,6 @@ int main(){
  * that I/we have not copied in part or whole or otherwise plagiarized the work of
  * other students and/or persons.
  *
- * <student1 full name (last name, first name)> (DLSU ID# <number>)
+ * Pioc, Thomas Gabriel (DLSU ID# 12506559)
  * Buena, Jester Paul (DLSU ID# 12507164)
  */
