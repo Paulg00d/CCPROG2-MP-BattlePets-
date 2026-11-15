@@ -1,6 +1,20 @@
+/**
+ * Description : This is a game simulation of BattlePets, where 2 players fight with their roster. 
+  				 Either a player wins by the most number of wins, or whether they have a lucky win
+				 (horizontal, vertical, diagonal)
+ * Author/s : Pioc, Thomas Gabriel
+ * 			 Buena, Jester Paul
+ * Section : S20E
+ * Last Modified : 15 November, 2026>
+ * Acknowledgments : <list of references used in the making of this project>
+ */
+
+
 #include <stdio.h>
 #include <string.h>
 #include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
+#define MAX_PETS 60//maximum pets PetList can accomodate
+#define MAX_PLAYERS 2//number of players
 
 int main(){
 	FILE *fp;
@@ -42,3 +56,15 @@ int main(){
 	
 	return 0;
 }
+
+/**
+ * This is to certify that this project is my/our own work, based on my/our personal
+ * efforts in studying and applying the concepts learned. I/We have constructed the
+ * functions and their respective algorithms and corresponding code by myself/ourselves.
+ * The program was run, tested, and debugged by my/our own efforts. I/We further certify
+ * that I/we have not copied in part or whole or otherwise plagiarized the work of
+ * other students and/or persons.
+ *
+ * <student1 full name (last name, first name)> (DLSU ID# <number>)
+ * Buena, Jester Paul (DLSU ID# 12507164)
+ */
