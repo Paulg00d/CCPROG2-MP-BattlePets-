@@ -110,6 +110,8 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
   	Battle(Player[0].PokeRoster, Player[1].PokeRoster, Player[0].szPlayerName, Player[1].szPlayerName);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
 }
 
+
+
 /*	The function Competdium gets the relevant information from competdium.txt and puts them int the PetList grid struct
 	@param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
 	@param @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60) to be modified in the function
@@ -127,6 +129,8 @@ void Competdium(Grid PetList[], int *nPetCount){
 		i++;//index of the array PetList for each pet
     }
 }
+
+
 
 /*	The function LoadRoster loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
 	@param PetList[] is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
@@ -175,6 +179,8 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 		}
 	}
 }
+
+
 
 /*	The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
 	@param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
@@ -322,8 +328,17 @@ void PrintMatchResults(int BattleGrid[][3]){
 }
 */
 
+
+
+/*	The function Horizontal checks how many horizontal lucky wins the player has.
+	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+	@param num is the number that the function will check to see if it aligns horizontally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+	@return the amount of horizontal wins
+*/
 int Horizontal(int grid[][3], int num){
   int x, z = 0;
+  
+  //this for loop goes to each row to check if each has a horizontal win
   for(x = 0; x < 3; x++)
       if(grid[x][0] == num && grid[x][1] == num && grid[x][2] == num)
         z++;
@@ -332,25 +347,39 @@ int Horizontal(int grid[][3], int num){
 }
 
 
+
+/*	The function Vertical checks how many vertical lucky wins the player has.
+	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+	@param num is the number that the function will check to see if it aligns vertically. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+	@return the amount of vertical wins
+*/
 int Vertical(int grid[][3], int num){
-  int x, z = 0;
+  	int x, z = 0;
  
-    for(x = 0; x < 3; x++)
-      if(grid[0][x] == num && grid[1][x] == num && grid[2][x])
-        z++;
+ 	//this for loop goes to each column to check if each has a vertical win
+	for(x = 0; x < 3; x++)
+		if(grid[0][x] == num && grid[1][x] == num && grid[2][x])
+    		z++;
   
   return z;
 }
 
 
+
+/*	The function Diagonal checks how many diagonal lucky wins the player has.
+	@param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
+	@param num is the number that the function will check to see if it aligns diagonally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
+	@return the amount of diagonal wins
+*/
 int Diagonal(int grid[][3], int num){
-  int z = 0;
-  
-  if(grid[0][0] == num && grid[1][1] == num && grid[2][2] == num)
-  	z++;
+	int z = 0;
   	
-  if(grid[0][2] == num && grid[1][1] == num && grid[2][0] == num)
-  	z++;
+  	//this if statement checks if there is a diagonal win
+  	if(grid[0][0] == num && grid[1][1] == num && grid[2][2] == num)
+  		z++;
+  	//this if statement checks if there is an antidiagonal (the opposite direction of diagonal) win
+  	if(grid[0][2] == num && grid[1][1] == num && grid[2][0] == num)
+  		z++;
   
   return z;
 }
