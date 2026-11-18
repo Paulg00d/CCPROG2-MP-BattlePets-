@@ -3,10 +3,10 @@
   				 Either a player wins by the most number of wins, or whether they have a lucky win
 				 (horizontal, vertical, diagonal)
  * Author/s : Pioc, Thomas Gabriel
- * 			 Buena, Jester Paul
+ * 			  Buena, Jester Paul
  * Section : S20E
- * Last Modified : 15 November, 2026>
- * Acknowledgments : <list of references used in the making of this project>
+ * Last Modified : <19 November, 2026>
+ * Acknowledgments : Gemini: used for assistance in answering questions about code concerns, Claude: used for assistance in answering questions about code concerns
  */
 
 
@@ -15,10 +15,9 @@
 #include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
 
 int main(){
-	FILE *fp;
 	int nChoice;//int variable to store the choice of the player
 	Grid PetList[MAX_PETS];//array of structs, with each struct containing relevant information of each pet
-	PlayerInfo Player[MAX_PLAYERS];//array of structs, with each struct containing the username and roster of the player
+	PlayerInfo Player[PLAYERS];//array of structs, with each struct containing the username and roster of the player
 	
 	//this do-while loop executes for as long as nChoice != 0
 	do {
@@ -43,10 +42,11 @@ int main(){
 				case 1:
 					BattleMenu(PetList, Player);
 					break;
-				case 2:
+				/*case 2:
 					break;
 				case 3:
 					break;
+					*/
 			}
 		}
 	
