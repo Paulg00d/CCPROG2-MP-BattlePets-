@@ -2,6 +2,12 @@
 #include <string.h>
 #include "BattlePetsFunctions.h"
 
+/*
+NOTE(TO BE DELETED): UPON RUNNING THE PROGRAM, IT WAS FOUND THAT CALLING THE COMPETDIUM FUNCTION MAY NOT 
+GET THE CONTENTS OF COMPETDIUM.TXT INTO PETLIST AND PRINT THEM, SO THE CODE WAS TEMPORARILLY MOVED TO THE MAIN BODY FOR IT TO WORK
+WHILE THE MAIN COMPETDIUM FUNCTION WAS TURNED TO A COMMENT
+*/
+
 /**
 * The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
 * @param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
@@ -9,16 +15,17 @@
 * @pre <list of pre-conditions>
 */
 void BattleMenu(Grid PetList[], PlayerInfo Player[]){
-  FILE *fp;
   int nChoice;/*this variable stores the choice of the player in choosing a new or existing username*/
   int nChoice2;/*this variable stores whether the player wants to load a saved roster or create a new roster*/
-  int nPetCount = 0;
   char szPetOfChoice[37];
+  FILE *fp;
 
-  //this for loop iterate between player 1 and player 2
-  for(int nCurrentPlayer = 0; nCurrentPlayer < MAX_PLAYERS; nCurrentPlayer++){
+  //this for loop iterates between player 1 and player 2
+  for(int nCurrentPlayer = 0; nCurrentPlayer < PLAYERS; nCurrentPlayer++){
+  	  int nPetCount = 0;
+  	  int i = 0;
 	  printf("+------------------------------------+\n");
-	  printf("|             Player %d              |\n", nCurrentPlayer + 1);
+	  printf("|             Player %d               |\n", nCurrentPlayer + 1);
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
@@ -49,11 +56,25 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 		
 		switch(nChoice2){
 			//chosen when the player chooses to load their saved roster savedroster/<player_name>.txt.
-			case 1: Competdium(PetList, &nPetCount); //loads the contents of Competdium into an array of structs called PetList
-					LoadRoster(PetList, Player, &nPetCount, nCurrentPlayer); //loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
+			case 1: //Competdium(PetList, &nPetCount); //loads the contents of Competdium into an array of structs called PetList
+					LoadRoster(PetList, Player, nPetCount, nCurrentPlayer); //loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
 					break;
+					
 			//chosen when the player chooses to create their own roster for the game
-			case 2: Competdium(PetList, &nPetCount);//loads the contents of Competdium into an array of structs called PetList
+			case 2: //Competdium(PetList, &nPetCount);//loads the contents of Competdium into an array of structs called PetList
+    				fp = fopen("competdium.txt","r");//opens the txt file competdium.txt to read all of its contents
+    
+   					//this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
+    				while(fscanf(fp, "%s", PetList[i].szPetName) == 1){
+    					fscanf(fp, "%s", PetList[i].szElement); //reads the element of the pet
+    					fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found after the element
+						fgets(PetList[i].szDescription, sizeof(PetList[i].szDescription), fp); //reads the description of the pet
+						fscanf(fp, "%d", &PetList[i].nMatchCount); //reads the match count of the pet
+						fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found after the match count
+						fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found between the records of 2 different pets
+						nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
+						i++; //increments the index of the array PetList for each pet 
+    				}
 					
 					printf("+------------------------------------+\n");
   					printf("|            Competdium              |\n");
@@ -63,7 +84,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 						printf("%d.\n", k + 1);//prints the number for the current pet (e.g. 1., 2.)
 						printf("Name: %s\n", PetList[k].szPetName);//displays the name of the pet
 						printf("Element: %s\n", PetList[k].szElement);//displays the element of the pet
-						printf("Description: %s\n\n", PetList[k].szDescription);//displays the description of the pet
+						printf("Description: %s\n", PetList[k].szDescription);//displays the description of the pet
 					}
 					//this for loop iterates each cell of the current player's grid
 					for(int l = 0; l < 3; l++){//iterates between rows
@@ -84,14 +105,19 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 										printf("> ");
 										scanf("%s", szPetOfChoice);//accepts the name of the pet with the string variable szPetOfChoice
 									}
-								}
-								
+								}							
 								//this for loop checks if the inputted pet name in szPetOfName is the same as any of the pets in the current player's roster
-								for(int o = 0; o < 3; o++)
-									for(int p = 0; p < 3; p++)
+								for(int o = 0; o < 3; o++){
+									for(int p = 0; p < 3; p++){
+										//this if statement makes sure that the check does not include the cell the entered name is in (e.g. if "Pikachu is entered in row 0 column 1, then it should check all the cells except for the one found in [0][1]")
+										if(o == l && p == m)
+											p++;
 										//this if statement executes whenever szPetOFChoice is the same as any of the pets in the current player's grid
 										if(strcmp(Player[nCurrentPlayer].PokeRoster[o][p].szPetName, szPetOfChoice) == 0)
 											nIsSame = 1;//the int variable nIsSame evaluates to 1 whenever szPetOfChoice is found to be the same as any pet in the current player's grid
+									}								
+								}
+										
 								//this if statement executes when nIsSame == 1, or when szPetOfChoice is found to be the same as any of the pets in the current player's grid	
 								if(nIsSame)
 									printf("This pet already exists in your roster.\n");
@@ -120,20 +146,25 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 * @param @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60) to be modified in the function
 * @pre <list of pre-conditions>
 */
+
+/*
 void Competdium(Grid PetList[], int *nPetCount){
-    FILE/*error because no stdio.h*/ *fp;
+    FILE *fp;
     int i = 0;
     
-    fp = fopen/*error because no stdio.h*/("competdium.txt","r");//opens the txt file competdium.txt to read all of its contents
+    fp = fopen("competdium.txt","r");//opens the txt file competdium.txt to read all of its contents
     
     //this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
-    while(fscanf/*error because no stdio.h*/(fp, "%s", PetList[i].szPetName) == 1){
-/*error because left-hand operand of comma expression has no effect*/		fscanf((fp,"%s %s %d", PetList[i].szElement, PetList[i].szDescription, &PetList[i].nMatchCount) == 3/*error because comparison between pointer and integer*/); //reads all the other relevant information (element, description, match count)
-		nPetCount++;//increments every time all the information of a pet have been successfully read
-		i++;//index of the array PetList for each pet
+    while(fgets(PetList[i].szPetName, sizeof(PetList[i].szPetName), fp) != NULL){
+    	fgets(PetList[i].szElement, sizeof(PetList[i].szElement), fp); //reads the element of the pet
+		fgets(PetList[i].szDescription, sizeof(PetList[i].szDescription), fp); //reads the description of the pet
+		fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found between the records of 2 different pets
+		fscanf(fp, "%d", &PetList[i].nMatchCount); //reads the match count of the pet
+		nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
+		i++; //increments the index of the array PetList for each pet 
     }
 }
-
+*/
 
 
 /**
@@ -144,7 +175,7 @@ void Competdium(Grid PetList[], int *nPetCount){
 * @param nCurrentPlayer is the index of the Player[] array of structs indicating the current player
 * @pre *nPetCount and nCurrentPlayer both start at 0
 */
-void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurrentPlayer){
+void LoadRoster(Grid PetList[], PlayerInfo Player[], int nPetCount, int nCurrentPlayer){
 	char bar[35]; //string to stor the name of the txt file containing the saved roster
 	
 	printf("Please write here the name of the file.\n");
@@ -178,7 +209,7 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 				}
 			}
 			if(nIsSame == 0){
-				printf("Ohhhh we got a newcomer here! Time to give %s an element!\n", Player[nCurrenPlayer].PokeRoster[l][m].szPetName);
+				printf("Ohhhh we got a newcomer here! Time to give %s an element!\n", Player[nCurrentPlayer].PokeRoster[l][m].szPetName);
 				printf("> ");
 				scanf("%s", Player[nCurrentPlayer].PokeRoster[l][m].szElement);
 			}
@@ -198,9 +229,10 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *nPetCount, int nCurren
 */
 void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name){
 	int BattleGrid[3][3];//an int array to display if one player won or if it is a tie in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - it is a draw)
-	int Player1/*an int variable to contain how many lucky wins player 1 has (e.g. 2 horizontal wins, 2 vertical wins)*/, Player2/*an int variable to contain how many lucky wins player 2 has (e.g. 2 horizontal wins, 2 vertical wins)*/;
+	int Player1;/*an int variable to contain how many lucky wins player 1 has (e.g. 2 horizontal wins, 2 vertical wins)*/
+	int Player2;/*an int variable to contain how many lucky wins player 2 has (e.g. 2 horizontal wins, 2 vertical wins)*/
 	int i, g;//int variables to go to each cell in each of the two player rosters and in BattleGrid[][]
-	int count1=0,count2=0;//Basically counts how many 1's or 2's are there
+	int count1 = 0, count2 = 0;//Basically counts how many 1's or 2's are there
 	
 	//this for loop goes to each cell in player 1 and player 2's rosters and BattleGrid to assign a value to show who wins or if it is a draw
     for(i = 0; i < 3; i++){
@@ -320,7 +352,7 @@ void Battle(Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1n
 			printf("Winner: %s (Player 2) [Majority Win]", Player2name);
 		}
 		else
-			printf("It is a draw")
+			printf("It is a draw");
 	}
     
     //horizontal(BattleGrid); this function calls the function horizontal() to check for any horizontal wins.
