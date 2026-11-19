@@ -92,6 +92,7 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 							//this do-while loop executes until the int variable nIsSame == 0 to make sure the entered pet name is not the same as any pet in the current player's grid
 							int nIsSame;
 							do{
+								nIsSame = 0;
 								printf("> ");
 								scanf("%s", szPetOfChoice);//accepts the name of the pet with the string variable szPetOfChoice
 								int nPetFound = 0;
@@ -123,9 +124,16 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 									printf("This pet already exists in your roster.\n");
 									
 								//executetes when nIsSame != 1, or when szPetOfChoice is not found to be the same as any of the pets in the current player's grid, and then szPetOfChoice is put in the current player's gird
-								else{
-									nIsSame = 0; 	
+								else{ 	
 									strcpy(Player[nCurrentPlayer].PokeRoster[l][m].szPetName, szPetOfChoice);
+									for(int q = 0; q < nPetCount; q++){
+										if(strcmp(Player[nCurrentPlayer].PokeRoster[l][m].szPetName, PetList[q].szPetName) == 0){
+											strcpy(Player[nCurrentPlayer].PokeRoster[l][m].szElement, PetList[q].szElement);
+											strcpy(Player[nCurrentPlayer].PokeRoster[l][m].szDescription, PetList[q].szDescription);
+											Player[nCurrentPlayer].PokeRoster[l][m].nMatchCount = PetList[q].nMatchCount;
+										}
+									}
+										
 								}
 							}while(nIsSame);//this do-while loop exits when nIsSame == 0
 						}
