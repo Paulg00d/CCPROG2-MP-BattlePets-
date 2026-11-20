@@ -14,7 +14,7 @@ WHILE THE MAIN COMPETDIUM FUNCTION WAS TURNED TO A COMMENT
 * @param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
 * @pre <list of pre-conditions>
 */
-void BattleMenu(Grid PetList[], PlayerInfo Player[]){
+void BattleMenu(Grid PetList[], PlayerInfo Player[], int nPetCount){
   int nChoice;/*this variable stores the choice of the player in choosing a new or existing username*/
   int nChoice2;/*this variable stores whether the player wants to load a saved roster or create a new roster*/
   char szPetOfChoice[37];
@@ -22,7 +22,6 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 
   //this for loop iterates between player 1 and player 2
   for(int nCurrentPlayer = 0; nCurrentPlayer < PLAYERS; nCurrentPlayer++){
-  	  int nPetCount = 0;
   	  int i = 0;
 	  printf("+------------------------------------+\n");
 	  printf("|             Player %d               |\n", nCurrentPlayer + 1);
@@ -62,19 +61,6 @@ void BattleMenu(Grid PetList[], PlayerInfo Player[]){
 					
 			//chosen when the player chooses to create their own roster for the game
 			case 2: //Competdium(PetList, &nPetCount);//loads the contents of Competdium into an array of structs called PetList
-    				fp = fopen("competdium.txt","r");//opens the txt file competdium.txt to read all of its contents
-    
-   					//this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
-    				while(fscanf(fp, "%s", PetList[i].szPetName) == 1){
-    					fscanf(fp, "%s", PetList[i].szElement); //reads the element of the pet
-    					fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found after the element
-						fgets(PetList[i].szDescription, sizeof(PetList[i].szDescription), fp); //reads the description of the pet
-						fscanf(fp, "%d", &PetList[i].nMatchCount); //reads the match count of the pet
-						fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found after the match count
-						fgets(PetList[i].Buffer, sizeof(PetList[i].Buffer), fp); //gets the '\n' character found between the records of 2 different pets
-						nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
-						i++; //increments the index of the array PetList for each pet 
-    				}
 					
 					printf("+------------------------------------+\n");
   					printf("|            Competdium              |\n");
@@ -184,25 +170,25 @@ void Competdium(Grid PetList[], int *nPetCount){
 * @pre *nPetCount and nCurrentPlayer both start at 0
 */
 void LoadRoster(Grid PetList[], PlayerInfo Player[], int nPetCount, int nCurrentPlayer){
-	char bar[35]; //string to stor the name of the txt file containing the saved roster
+	char szFileName[35] = "saved_roster."; //string to stor the name of the txt file containing the saved roster
+	char szTemp[35];
 	
 	printf("Please write here the name of the file.\n");
 	printf("Note: Please do not include .txt after writing its name because .txt will already be included in the file name by the system.\n");
-	printf("(For example: if you type cars.txt, then the system will try to search for cars.txt.txt)\n");
+	printf("(For example: if you type cars.txt, then the system will try to search for saved_roster/cars.txt.txt)\n");
 	printf("> ");
-    scanf("%s", bar);
+    scanf("%s", szTemp);
     
-    strcat(bar, ".txt"); //catenates the string ".txt" to the end of the string contained in the string variable bar
+    strcat(szFileName, szTemp);
+    strcat(szFileName, ".txt"); //catenates the string ".txt" to the end of the string contained in the string variable bar
 
 	
-	FILE *fp = fopen(bar,"r"); //opens the txt file bearing the same name as bar to read its contents
+	FILE *fp = fopen(szFileName,"r"); //opens the txt file bearing the same name as bar to read its contents
     
     //this for loop goes to each cell of the current player's grid
     for(int j = 0; j < 3; j++)
     	for(int k = 0; k < 3; k++)
-	    	fscanf(fp,"%s", Player[nCurrentPlayer].PokeRoster[j][k].szPetName); //puts the pet names of the txt file with the same name as bar into each cell of the current player's grid
-    
-    fclose(fp);
+    		fscanf(fp,"%s", Player[nCurrentPlayer].PokeRoster[j][k].szPetName); //puts the pet names of the txt file with the same name as bar into each cell of the current player's grid
     
     int nIsSame;//flag to check if any of the pets in the player's saved roster is found in competdium. For each cell in the player's grid, it evaluates to 1 if it is found in competdium, and 0 if otherwise
     
@@ -213,6 +199,8 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int nPetCount, int nCurrent
         	for(int n = 0; n < nPetCount; n++){
         		if(strcmp(Player[nCurrentPlayer].PokeRoster[l][m].szPetName, PetList[n].szPetName) == 0){
         			strcpy(Player[nCurrentPlayer].PokeRoster[l][m].szElement, PetList[n].szElement);
+        			fgets(Player[nCurrentPlayer].PokeRoster[l][m].Buffer, sizeof(Player[nCurrentPlayer].PokeRoster[l][m].Buffer), fp);
+        			fgets(Player[nCurrentPlayer].PokeRoster[l][m].szDescription, sizeof(Player[nCurrentPlayer].PokeRoster[l][m].szDescription), fp);
         			nIsSame = 1;
 				}
 			}
@@ -223,6 +211,8 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int nPetCount, int nCurrent
 			}
 		}
 	}
+	
+	fclose(fp);
 }
 
 
