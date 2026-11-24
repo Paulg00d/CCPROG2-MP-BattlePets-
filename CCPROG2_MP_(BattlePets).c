@@ -5,7 +5,7 @@
  * Author/s : Pioc, Thomas Gabriel
  * 			  Buena, Jester Paul
  * Section : S20E
- * Last Modified : <19 November, 2026>
+ * Last Modified : <25 November, 2026>
  * Acknowledgments : Gemini: used for assistance in answering questions about code concerns, Claude: used for assistance in answering questions about code concerns
  */
 
@@ -15,13 +15,42 @@
 #include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
 
 int main(){
+	FILE *fp;//opens the txt file competdium.txt to read all of its contents
 	int nChoice;//int variable to store the choice of the player
+	int nPetCount = 0, nPlayerCount = 0, i = 0;
 	Grid PetList[MAX_PETS];//array of structs, with each struct containing relevant information of each pet
 	PlayerInfo Player[PLAYERS];//array of structs, with each struct containing the username and roster of the player
+	PlayerInfo PlayerList[MAX_PLAYERS];
 	
+	fp = fopen("competdium.txt", "r");
+	
+	//this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
+	while(fscanf(fp, "%s", PetList[nPetCount].szPetName) == 1 && i < MAX_PETS){
+    	fscanf(fp, "%s", PetList[nPetCount].szElement); //reads the element of the pet
+    	fgets(PetList[i].Buffer, sizeof(PetList[nPetCount].Buffer), fp); //gets the '\n' character found after the element
+		fgets(PetList[i].szDescription, sizeof(PetList[nPetCount].szDescription), fp); //reads the description of the pet
+		int length  = strlen(PetList[nPetCount].szDescription);
+		PetList[nPetCount].szDescription[length - 1] = '\0';
+		fscanf(fp, "%d", &PetList[nPetCount].nMatchCount); //reads the match count of the pet
+		nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
+    }
+    
+    fclose(fp);
+    
+	
+	printf("WELCOME TO BATTLEPETS!\n");
 	//this do-while loop executes for as long as nChoice != 0
-	do {
-		printf("WELCOME TO BATTLEPETS!\n");
+	do{
+    	if((fp = fopen("players.txt", "r")) != NULL){
+    		while(fscanf(fp, "%s", PlayerList[nPlayerCount].szPlayerName) == 1 && nPlayerCount < MAX_PLAYERS){
+	  			fscanf(fp, "%d", &PlayerList[nPlayerCount].nWin);
+	  			fscanf(fp, "%d", &PlayerList[nPlayerCount].nLoss);
+	  			fscanf(fp, "%d", &PlayerList[nPlayerCount].nDraw);
+	  			nPlayerCount++;
+			}
+		}
+		fclose(fp);
+		
 		printf("+------------------------------------+\n");
 		printf("|            Choose Here             |\n");
 		printf("+-----------+------------------------+\n");
@@ -40,11 +69,12 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu(PetList, Player);
+					BattleMenu(PetList, PlayerList, Player, &nPetCount, &nPlayerCount);
 					break;
-				/*case 2:
+				case 2:
+					PrintAddDeleteEditComp(PetList, &nPetCount);
 					break;
-				case 3:
+				/*case 3:
 					break;
 					*/
 			}
