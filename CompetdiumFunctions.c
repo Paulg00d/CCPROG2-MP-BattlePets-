@@ -1,56 +1,63 @@
 #include <stdio.h>
 #include <string.h>
-#include "BattlePetsFunctions.h"
+#include "CCPROG2_MP_(BattlePets)_Functions.h"
 
 void PrintAddDeleteEditComp(Grid PetList[], int *pPetCount){
-	FILE *fp;
-	int nChoice, nChoice2;
-	int nIsSame;
-	//char szPetOfChoice[37];
+	int nChoice;
 	
-	printf("+------------------------------------+\n");
-	printf("|  Choose what you want to do with   |\n");
-	printf("|            the pets                |\n");
-	printf("+-----------+------------------------+\n");
-	printf("|     1     |    View BattlePets/s   |\n");
-	printf("+-----------+------------------------+\n");
-	printf("|     2     |      Add BattlePet     |\n");
-	printf("+-----------+------------------------+\n");
-	printf("|     3     |      Edit BattlePet    |\n");
-	printf("+-----------+------------------------+\n");
-	printf("|     4     |    Delete BattlePet    |\n");
-	printf("+-----------+------------------------+\n");
-	printf("|     5     |      Save Roster       |\n");
-	printf("+-----------+------------------------+\n");
-	printf("> ");
-	scanf("%d",&nChoice);
-	
-	switch(nChoice){
-		case 1:
-			PrintBattlePets(PetList, pPetCount);
-			break;
-			
-		case 2:
-			AddBattlePets(PetList, nPetCount, pPetCount)
-			break;
+	do{
+		printf("+------------------------------------+\n");
+		printf("|  Choose what you want to do with   |\n");
+		printf("|            the pets                |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     1     |    View BattlePets/s   |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     2     |      Add BattlePet     |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     3     |      Edit BattlePet    |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     4     |    Delete BattlePet    |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     5     |      Save Roster       |\n");
+		printf("+-----------+------------------------+\n");
+		printf("|     0     |          Exit          |\n");
+		printf("+-----------+------------------------+\n");
+		printf("> ");
+		scanf("%d",&nChoice);
 		
-		case 3:
-			PrintBattlePets(PetList, pPetCount);
-			EditBattlePets(PetList, pPetCount);
-			break
+		if(nChoice != 0){
+			switch(nChoice){
+			case 1:
+				PrintBattlePets(PetList, pPetCount);
+				break;
 			
-		case 4:
-			PrintBattlePets(PetList, pPetCount);
-			DeleteBattlePets(PetList, pPetCount);
-			break;
-		case 5:
-			PrintBattlePets(PetList, pPetCount);
-			SaveRoster();
-			break;
-	}
+			case 2:
+				AddBattlePets(PetList, pPetCount);
+				break;
+		
+			case 3:
+				PrintBattlePets(PetList, pPetCount);
+				EditBattlePets(PetList, pPetCount);
+				break;
+			
+			case 4:
+				DeleteBattlePets(PetList, pPetCount);
+				break;
+				
+			case 5:
+				PrintBattlePets(PetList, pPetCount);
+				SaveRoster();
+				break;
+			}
+		}
+	}while(nChoice != 0);
 }
 
-
+/**
+ * The function PrintBattlePets prints all the pets stored in Petlist
+ * @param PetList is an array of structs containing the information 
+ * @pre Player1Roster and Player2Roster already have the relevant pet information each, and Player1Name and Player2Name already contain the names of the players, nPlayerCount is at least 0
+ */
 void PrintBattlePets(Grid PetList[], int *pPetCount){
 	for(int i = 0; i < *pPetCount && i < MAX_PETS; i++){
 		printf("%d.\n", i + 1);
@@ -62,15 +69,14 @@ void PrintBattlePets(Grid PetList[], int *pPetCount){
 }
 
 void AddBattlePets(Grid PetList[], int *pPetCount){
-	int nPetCount = *pPetCount;
 	int nRemainingPets = MAX_PETS - *pPetCount;
 	int nChoice;
 	char cBuffer;
-	
-	printf("%d more pets can be added to Competdium.\n", nRemainingCount);
+	FILE *fp;
 	
 	do{
-		printf("|---There are now %d pets in Competdium.---|\n", *pPetCount);
+		printf("|---%d more pets can be added to Competdium---|\n", nRemainingPets);
+		printf("|---There are now %d pets in Competdium---|\n", *pPetCount);
 		printf("Enter the name: ");
 		scanf("%s", PetList[*pPetCount].szPetName);
 		scanf("%c", &cBuffer);
@@ -78,7 +84,7 @@ void AddBattlePets(Grid PetList[], int *pPetCount){
 		scanf("%s", PetList[*pPetCount].szElement);
 		scanf("%c", &cBuffer);
 		printf("Enter the description: ");
-		scanf("%s", PetList[*pPetCount].szDescription);
+		scanf("%[^\n]", PetList[*pPetCount].szDescription);
 		PetList[*pPetCount].nMatchCount = 0;
 		
 		(*pPetCount)++;
@@ -88,12 +94,23 @@ void AddBattlePets(Grid PetList[], int *pPetCount){
 		printf("> ");
 		scanf("%d", &nChoice);
 	}while(nChoice == 1 && nRemainingPets > 0);
+	
+	fp = fopen("competdium.txt", "w");
+	for(int i = 0; i < *pPetCount && i < MAX_PETS; i++){
+		fprintf(fp, "%s\n", PetList[i].szPetName);
+		fprintf(fp, "%s\n", PetList[i].szElement);
+		fprintf(fp, "%s\n", PetList[i].szDescription);
+		fprintf(fp, "%d\n\n", PetList[i].nMatchCount);
+	}
+	
+	fclose(fp);
 }
 
 void EditBattlePets(Grid PetList[], int *pPetCount){
 	FILE *fp;
 	int nChoice;
 	int index;
+	char cBuffer;
 	
 	do{
 		printf("Please input the number for the pokemon you wish to edit:");
@@ -103,16 +120,18 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 		printf("|---Editing %s---|\n", PetList[index].szPetName);
 		printf("Do you wish to edit its name? (1 - yes, 2 - no)\n");
 		printf("> ");
-		scanf("%d", nChoice);
+		scanf("%d", &nChoice);
+		scanf("%c", &cBuffer);
 		if(nChoice == 1){
 			printf("Current name: %s\n",PetList[index].szPetName);
 			printf("New name: ");
-			scanf("%s", PetList[index].szPetname);
+			scanf("%s", PetList[index].szPetName);
 		}
 		
 		printf("Do you wish to edit its element? (1 - yes, 2 - no)\n");
 		printf("> ");
-		scanf("%d", nChoice);
+		scanf("%d", &nChoice);
+		scanf("%c", &cBuffer);
 		if(nChoice == 1){
 			printf("Current element: %s\n",PetList[index].szElement);
 			printf("New element: ");
@@ -121,11 +140,12 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 		
 		printf("Do you wish to edit its description? (1 - yes, 2 - no)\n");
 		printf("> ");
-		scanf("%d", nChoice);
+		scanf("%d", &nChoice);
+		scanf("%c", &cBuffer);
 		if(nChoice == 1){
-			printf("Current description: %s\n",PetList[index].szPetName);
+			printf("Current description: %s\n",PetList[index].szDescription);
 			printf("New description: ");
-			scanf("%[\n]", PetList[index].szDescription);
+			scanf("%[^\n]", PetList[index].szDescription);
 		}
 		
 		printf("Edit complete! Do you wish to edit more pokemon? (1 - yes, 2 - no)\n");
@@ -134,11 +154,11 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 	}while(nChoice == 1);
 	
 	fp = fopen("competdium.txt", "w");
-	for(int i = 0; i < *pPetCount && i , MAX_PETS; i++){
-		fprintf("%s\n", PetList[i].szPetName);
-		fprintf("%s\n", PetList[i].szElement);
-		fprintf("%s\n", PetList[i].szDescription);
-		fprintf("%d\n\n", PetList[i].nMatchCount);
+	for(int i = 0; i < *pPetCount && i < MAX_PETS; i++){
+		fprintf(fp, "%s\n", PetList[i].szPetName);
+		fprintf(fp, "%s\n", PetList[i].szElement);
+		fprintf(fp, "%s\n", PetList[i].szDescription);
+		fprintf(fp, "%d\n\n", PetList[i].nMatchCount);
 	}
 	
 	fclose(fp);
@@ -146,13 +166,14 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 
 void DeleteBattlePets(Grid PetList[], int *pPetCount){
 	int nNum;
-	int nPetCount = *pPetCount;
 	int nChoice;
 	
 	FILE *fp = fopen("competdium.txt", "w");
 	
 	do{
-		printf("Enter the number for the pokemon you wish to delete: ");
+		PrintBattlePets(PetList, pPetCount);
+		
+		printf("Enter the number corresponding to the pokemon you wish to delete: ");
 		scanf("%d", &nNum);
 	
 		for(int i = nNum - 1; i < *pPetCount && i < MAX_PETS; i++)
@@ -166,8 +187,8 @@ void DeleteBattlePets(Grid PetList[], int *pPetCount){
 			scanf("%d", &nChoice);
 		}
 		else
-			printf("Looks like Competdium is empty now :-(.\n")
-	}while(nChoice == 1 && *pPetcount > 0);
+			printf("Looks like Competdium is empty now :-(.\n");
+	}while(nChoice == 1 && *pPetCount > 0);
 	
 	for(int j = 0; j < *pPetCount && j < MAX_PETS; j++){
 		fprintf(fp, "%s\n", PetList[j].szPetName);
@@ -191,9 +212,11 @@ void SaveRoster(){
 	strcat(filename, playername);
 	strcat(filename, ".txt");
 	
+	printf("\n");
+	
 	for(int i = 0; i < 3; i++){
 		for(int j = 0; j < 3; j++){
-			printf("\n\nPlease input pokemon: ");
+			printf("Please input pokemon: ");
 			scanf("%s", TempRoster[i][j].szPetName);
 		}
 	}
