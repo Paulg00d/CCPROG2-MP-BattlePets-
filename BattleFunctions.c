@@ -1,17 +1,20 @@
-#include <stdio.h>
+v#include <stdio.h>
 #include <string.h>
-#include "BattlePetsFunctions.h"
+#include "CCPROG2_MP_(BattlePets)_Functions.h"
 
 /**
-* The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
-* @param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
-* @param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
-* @pre <list of pre-conditions>
-*/
-void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], int *pPetCount, int *pPlayerCount){
+ * The function BattleMenu is called when the player chooses the first option (Battle!) in the main menu
+ * @param PetList is an array of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+ * @param PlayerList is an array of structs, with each struct containing the information of each player (name, number of wins, number of losses, number of draws)
+ * @param Player is an array of structs, with each struct containing the information of the players currently playing (name, roster), of which there are two
+ * @param *pPetCount is an int pointer representing the current number of pets in PetList and the Competdium
+ * @param nPlayerCount is an int variable contining the current number of players who have played, stored in PlayerList
+ * @pre nPlayerCount starts at 0
+ */
+void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], int *pPetCount, int nPlayerCount){
   int nChoice;/*this variable stores the choice of the player in choosing a new or existing username*/
   int nChoice2;/*this variable stores whether the player wants to load a saved roster or create a new roster*/
-  char szPetOfChoice[37];
+  char szPetOfChoice[37];/*this string variable stores the pet name entered by the player*/
   FILE *fp;
 
   //this for loop iterates between player 1 and player 2
@@ -21,9 +24,10 @@ void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], in
 	  printf("+-----------+------------------------+\n");
 	  printf("|     1     |      <New Player>      |\n");
 	  printf("+-----------+------------------------+\n");
+	  //this if statement executes if players.txt already exists (it is created after th very first match conducted in this game)
 	  if((fp = fopen("players.txt", "r")) != NULL){
-	  	fclose(fp);
-	  	for(int i = 0; i < *pPlayerCount; i++){
+	  	fclose(fp);//closes the file immediately as players.txt would have already been opened in the previous function
+	  	for(int i = 0; i < nPlayerCount; i++){//this for loop prints all the player usernames used in previous matches
 		  	printf("|     %d     |      %s      |\n", i + 2, PlayerList[i].szPlayerName);
 	  		printf("+-----------+------------------------+\n");
 	  	}
@@ -31,12 +35,13 @@ void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], in
 	  
 	  printf("> ");
 	  scanf("%d", &nChoice);
-		//when option 1 is chosen (choosing a new username)
+	  //when option 1 is chosen (choosing a new username)
       if(nChoice == 1){
 		printf("Enter username: ");
 		scanf("%s", Player[nCurrentPlayer].szPlayerName);
 	  }
-	  else{//when the player chooses to use an existing username
+	  //when the player chooses to use an existing username
+	  else{
 	  	strcpy(Player[nCurrentPlayer].szPlayerName, PlayerList[nChoice - 2].szPlayerName);
 	  } 
 		printf("+------------------------------------+\n");
@@ -59,13 +64,7 @@ void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], in
 			case 2: printf("+------------------------------------+\n");
   					printf("|            Competdium              |\n");
 	  				printf("+------------------------------------+\n");
-					//this for loop prints the contents of the PetList array which stores the contents of competdium.txt
-					for(int k = 0; k < *pPetCount; k++){
-						printf("%d.\n", k + 1);//prints the number for the current pet (e.g. 1., 2.)
-						printf("Name: %s\n", PetList[k].szPetName);//displays the name of the pet
-						printf("Element: %s\n", PetList[k].szElement);//displays the element of the pet
-						printf("Description: %s\n\n", PetList[k].szDescription);//displays the description of the pet
-					}
+					PrintBattlePets(PetList, pPetCount);
 					//this for loop iterates each cell of the current player's grid
 					for(int l = 0; l < 3; l++){//iterates between rows
 						for(int m = 0; m < 3; m++){//iterates between columns
@@ -122,53 +121,182 @@ void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], in
 		}
   	}
   	
-  	
-  	Battle(Player, PlayerList, Player[0].PokeRoster, Player[1].PokeRoster, Player[0].szPlayerName, Player[1].szPlayerName, pPlayerCount);//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
+  	//this function is called to have the rosters of the 2 players fight and to store the result of each battle grid cell in an int array
+  	Battle(PetList, pPetCount, Player, PlayerList, Player[0].PokeRoster, Player[1].PokeRoster, Player[0].szPlayerName, Player[1].szPlayerName, nPlayerCount);
+
+	//this for loop and nested for loops clear the name, element, and description of each pet in the players' rosters once the match is over
+	for(int r = 0; r < PLAYERS; r++){
+		for(int s = 0; s < 3; s++){
+			for(int t = 0; t < 3; t++){
+				Player[r].PokeRoster[s][t].szPetName[0] = '\0';
+				Player[r].PokeRoster[s][t].szElement[0] = '\0';
+				Player[r].PokeRoster[s][t].szDescription[0] = '\0';
+			}
+		}
+	}	
+}
+
+void SaveMatchResults(PlayerInfo Player[], int BattleGrid[][3]){
+	FILE *fp;
+	char filename[22] = "results.match_";
+	char cNum = '1';
+	
+	filename[14] = cNum;
+	strcat(filename, ".txt");
+	
+	while((fp = fopen(filename, "r")) != NULL){
+		fclose(fp);
+		filename[14] = '\0';
+		cNum += 1;
+		filename[14] = cNum;
+		strcat(filename, ".txt");
+	}
+	
+	fclose(fp);
+	
+	fp = fopen(filename, "w");
+	
+	for(int i = 0; i < PLAYERS; i++)
+		fprintf(fp, "Player%d: %s\n", i + 1, Player[i].szPlayerName);
+		
+	fprintf(fp, "\n");
+	fprintf(fp, "P1 Roster vs. P2 Roster\n");
+	for(int j = 0; j < 3; j++)
+		for(int k = 0; k < 3; k++)
+			fprintf(fp, "%s vs. %s\n", Player[0].PokeRoster[j][k].szPetName, Player[1].PokeRoster[j][k].szPetName);
+	
+	fprintf(fp, "\n");
+	fprintf(fp, "Match Results\n");
+	
+	for(int l = 0; l < 3; l++){
+		for(int m = 0; m < 3; m++){
+			if(m == 2){
+				if(BattleGrid[l][m] == 0)
+					fprintf(fp, "D\n");
+				else
+					fprintf(fp, "%d\n", BattleGrid[l][m]);
+			}
+			else{
+				if(BattleGrid[l][m] == 0)
+					fprintf(fp, "D ");
+				else
+					fprintf(fp, "%d ", BattleGrid[l][m]);
+			}
+		}
+	}
+	
+	fprintf(fp, "\nWinner: ");
+	
+	for(int n = 0; n < PLAYERS; n++){
+		if(Player[n].nWin == 1){
+			fprintf(fp, "%s\n", Player[n].szPlayerName);
+			switch(Player[n].cWinType){
+				case 'M':
+					fprintf(fp, "Type of Win: Majority Win\n");
+					break;
+				case 'L':
+					fprintf(fp, "Type of Win: Lucky Win\n");
+					break;
+			}
+		}
+	}
+	
+	fclose(fp);
+			
+}
+
+/**
+ * The function UpdateCompetdium updates the match count of the pets found in Competdium if they have been used in battle 
+ * @param Player[] is an array of structs, with each struct containing the information of each player (name, wins, losses, draws, roster), of which there are two
+ * @param PetList[] is a list of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+ * @pre PetList already contains the information from Competdium, Player already contains information of the two players playing the game, and *pPetCount is a non-negative integer
+ */
+void UpdateCompetdium(PlayerInfo Player[], Grid PetList[], int *pPetCount){
+	FILE *fp;
+	
+	for(int i = 0; i < 3; i++)
+		for(int j = 0; j < 3; j++)
+			for(int k = 0; k < *pPetCount; k++)
+				if(strcmp(Player[0].PokeRoster[i][j].szPetName, PetList[k].szPetName) == 0)
+					PetList[k].nMatchCount += Player[0].PokeRoster[i][j].nMatchCount;
+					
+	for(int l = 0; l < 3; l++){
+		for(int m = 0; m < 3; m++){
+			int nIsSame = 0;
+			
+			for(int n = 0; n < 3; n++){
+				for(int o = 0; o < 3; o++){
+					if(strcmp(Player[1].PokeRoster[l][m].szPetName, Player[0].PokeRoster[n][o].szPetName) == 0){
+						nIsSame = 1;
+					}
+				}
+			}
+			
+			if(!nIsSame){
+				for(int p = 0; p < *pPetCount; p++){
+					if(strcmp(Player[1].PokeRoster[l][m].szPetName, PetList[p].szPetName) == 0){
+						PetList[p].nMatchCount += Player[1].PokeRoster[l][m].nMatchCount;
+					}
+				}
+			}
+		}
+	}
+	
+	fp = fopen("competdium.txt", "w");
+	
+	for(int q = 0; q < *pPetCount; q++){
+		fprintf(fp, "%s\n", PetList[q].szPetName);
+		fprintf(fp, "%s\n", PetList[q].szElement);
+		fprintf(fp, "%s\n", PetList[q].szDescription);
+		fprintf(fp, "%d\n\n", PetList[q].nMatchCount);
+	}
+		
+	fclose(fp);		
+			
 }
 
 
 /**
- * The function SaveMatchResults saves the name, wins, losses, and draw of each of the players who participated in the battle in a file called players.txt, whereas it also saves the result of the match in 
+ * The function SavePlayerResults saves the name, wins, losses, and draw of each of the players who participated in the battle in a file called players.txt, whereas it also saves the result of the match in 
  * @param Player[] is an array of structs, with each struct containing the information of each player (name, wins, losses, draws, roster), of which there are two
  * @param PlayerList[] is a list of structs, with each struct containing the information of each battle pet (name, element, description, match count)
+ * @param nPlayerCount is a int variable containing the current number of players in PlayerList[]
+ * @pre PlayerList contains the usernames of all players that have played in the game before and nPlayerCount is at least 0
  */
-void SaveMatchResults(PlayerInfo Player[], PlayerInfo PlayerList[], int *pPlayerCount){
-	FILE *fp = fopen("players.txt", "r");
-	if(fp != NULL){
-		for(int j = 0; j < PLAYERS; j++){
-			for(int l = 0; l < *pPlayerCount && l < MAX_PLAYERS; l++){
-				if(strcmp(Player[j].szPlayerName, PlayerList[l].szPlayerName) == 0){
-					PlayerList[l].nWin += Player[j].nWin;
-					PlayerList[l].nLoss += Player[j].nLoss;
-					PlayerList[l].nDraw += Player[j].nDraw;
-				}
+void SavePlayerResults(PlayerInfo Player[], PlayerInfo PlayerList[], int nPlayerCount){
+	FILE *fp;
+	int nFound;
+	
+	for(int i = 0; i < PLAYERS; i++){
+		nFound = 0;
+		for(int j = 0; j < MAX_PLAYERS; j++){
+			if(strcmp(Player[i].szPlayerName, PlayerList[j].szPlayerName) == 0){
+				nFound = 1;
+				PlayerList[j].nWin += Player[i].nWin;
+				PlayerList[j].nLoss += Player[i].nLoss;
+				PlayerList[j].nDraw += Player[i].nDraw;
 			}
 		}
 		
-		fp = fopen("player.txt", "w");
-		
-		for(int m = 0; m < *pPlayerCount && m < MAX_PLAYERS; m++){
-			fprintf(fp, "%s\n", PlayerList[m].szPlayerName);
-			fprintf(fp, "%d\n", PlayerList[m].nWin);
-			fprintf(fp, "%d\n", PlayerList[m].nLoss);
-			fprintf(fp, "%d\n\n", PlayerList[m].nDraw);
+		if(!nFound){
+			strcpy(PlayerList[nPlayerCount].szPlayerName, Player[i].szPlayerName);
+			PlayerList[nPlayerCount].nWin = Player[i].nWin;
+			PlayerList[nPlayerCount].nLoss = Player[i].nLoss;
+			PlayerList[nPlayerCount].nDraw = Player[i].nDraw;
+			nPlayerCount++;
 		}
-		
-		fclose(fp);
 	}
-	else{
-		fclose(fp);
-		fp = fopen("players.txt", "w");
-		
-		for(int n = 0; n < PLAYERS; n++){
-			fprintf(fp, "%s\n", Player[n].szPlayerName);
-			fprintf(fp, "%d\n", Player[n].nWin);
-			fprintf(fp, "%d\n", Player[n].nLoss);
-			fprintf(fp, "%d\n\n", Player[n].nDraw);
-		}
-		
-		fclose(fp);
+	
+	fp = fopen("players.txt", "w");
+	
+	for(int k = 0; k < nPlayerCount; k++){
+		fprintf(fp, "%s\n", PlayerList[k].szPlayerName);
+		fprintf(fp, "%d\n", PlayerList[k].nWin);
+		fprintf(fp, "%d\n", PlayerList[k].nLoss);
+		fprintf(fp, "%d\n\n", PlayerList[k].nDraw);
 	}
+	
+	fclose(fp);
 }
 
 
@@ -176,9 +304,9 @@ void SaveMatchResults(PlayerInfo Player[], PlayerInfo PlayerList[], int *pPlayer
  * The function LoadRoster loads the contents of savedroster/<player_name>.txt onto the roster of the current player (the player indicated by the nCurrentPlayer index)
  * @param PetList[] is an list of structs, with each struct containing the information of each battle pet (name, element, description, match count)
  * @param Player is an array of structs, with each struct containing the information of each player (name, roster), of which there are two
- * @param *nPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60)
+ * @param *pPetCount is an int pointer pointing to the an int variable containing the number of pets stored in PetList so far (maximum is 60)
  * @param nCurrentPlayer is the index of the Player[] array of structs indicating the current player
- * @pre *nPetCount and nCurrentPlayer both start at 0
+ * @pre *pPetCount and nCurrentPlayer both start at 0
  */
 void LoadRoster(Grid PetList[], PlayerInfo Player[], int *pPetCount, int nCurrentPlayer){
 	char szFileName[35] = "saved_roster."; //string to stor the name of the txt file containing the saved roster
@@ -190,7 +318,7 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *pPetCount, int nCurren
 	printf("> ");
     scanf("%s", szTemp);
     
-    strcat(szFileName, szTemp);
+    strcat(szFileName, szTemp); //catenates the username entered in szTemp to szFileName which already contains the string "saved_roster."
     strcat(szFileName, ".txt"); //catenates the string ".txt" to the end of the string contained in the string variable bar
 
 	
@@ -230,13 +358,18 @@ void LoadRoster(Grid PetList[], PlayerInfo Player[], int *pPetCount, int nCurren
 
 /**
  * The function Battle stores the result of the fight between the rosters of the two players. Whichever pet wins, loses, or neither in each grid cell is stored in a new grid
+ * @param Petlist is an array of structs with each struct containing the information of all pets in Competdium (name, element, description, match count)
+ * @param *pPetCount is an int pointer variable containing the current number of pets in Competdium
+ * @param Player is an array of structs containing the information of the currently playing players (name, number of wins, number of losses, number of draws, roster)
+ * @param PlayerList is an array of structs containing the usernames of all players who have played the game before
  * @param Player1Roster is the roster of Player 1 in the form of a 2d array of structs, where each struct stores the name and element of each player
  * @param Player2Roster is the roster of Player 2 in the form of a 2d array of structs, where each struct stores the name and element of each player
  * @param Player1name is the username of player 1
  * @param Player2name is the username of player 2
- * @pre Player1Roster and Player2Roster already have the relevant pet information each, and Player1Name and Player2Name already contain the names of the players
+ * @param nPlayerCount is an int variable containing the current count of players stored in PlayerList
+ * @pre Player1Roster and Player2Roster already have the relevant pet information each, and Player1Name and Player2Name already contain the names of the players, nPlayerCount is at least 0
  */
-void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name, int *pPlayerCount){
+void Battle(Grid PetList[], int *pPetCount, PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name, int nPlayerCount){
 	int BattleGrid[3][3];//an int array to display if one player won or if it is a tie in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - it is a draw)
 	int Player1;/*an int variable to contain how many lucky wins player 1 has (e.g. 2 horizontal wins, 2 vertical wins)*/
 	int Player2;/*an int variable to contain how many lucky wins player 2 has (e.g. 2 horizontal wins, 2 vertical wins)*/
@@ -327,6 +460,7 @@ void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[]
 
 	if(Player1 > Player2){//executes if player 1 has more lucky wins than player 2
 		printf("Winner: %s (Player 1) [Lucky Win]\n\n", Player1name);
+		Player[0].cWinType = 'L';
 		Player[0].nWin = 1;
 		Player[0].nLoss = 0;
 		Player[0].nDraw = 0;
@@ -336,6 +470,7 @@ void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[]
 	}
     else if(Player2 > Player1){//executes if player 2 has more lucky wins than player 1
 		printf("Winner: %s (Player 2) [Lucky Win]\n\n", Player2name);
+		Player[1].cWinType = 'L';
 		Player[0].nWin = 0;
 		Player[0].nLoss = 1;
 		Player[0].nDraw = 0;
@@ -358,6 +493,7 @@ void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[]
 		}
 		if(count1 > count2){//executes if player 1 has more wins than player 2
 			printf("Winner: %s (Player 1) [Majority Win]\n\n", Player1name);
+			Player[0].cWinType = 'M';
 			Player[0].nWin = 1;
 			Player[0].nLoss = 0;
 			Player[0].nDraw = 0;
@@ -367,6 +503,7 @@ void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[]
 		}
 		else if(count2 > count1){//executes if player 2 has more wins than player 1
 			printf("Winner: %s (Player 2) [Majority Win]\n\n", Player2name);
+			Player[1].cWinType = 'M';
 			Player[0].nWin = 0;
 			Player[0].nLoss = 1;
 			Player[0].nDraw = 0;
@@ -385,21 +522,27 @@ void Battle(PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[]
 		}
 	}
     
-    //printf("%d %d %d %d %d %d", Player[0].nWin, Player[0].nLoss, Player[0].nDraw, Player[1].nLoss, Player[1].nWin, Player[1].nDraw);
-    
-    SaveMatchResults(Player, PlayerList, pPlayerCount);
-}
-
-/*
-void PrintMatchResults(int BattleGrid[][3]){
-	printf("+---+---+---+\n");
-	for(int i = 0; i < 3; i++)
-		for(int j = 0; j < 3; j++){
+    for(int j = 0; j < 3; j++)
+    	for(int k = 0; k < 3; k++)
+    		Player[0].PokeRoster[j][k].nMatchCount = 1;
+    		
+    for(int l = 0; l < 3; l++){
+    	for(int m = 0; m < 3; m++){
+    		int nIsSame = 0;
+    		for(int n = 0; n < 3; n++)
+    			for(int o = 0; o < 3; o++)
+    				if(strcmp(Player[0].PokeRoster[n][o].szPetName, Player[1].PokeRoster[l][m].szPetName) == 0)
+    					nIsSame = 1;
 			
+			if(!nIsSame)
+				Player[1].PokeRoster[l][m].nMatchCount = 1;
 		}
+	}
+    
+    SaveMatchResults(Player, BattleGrid);
+    SavePlayerResults(Player, PlayerList, nPlayerCount); //function call to save the information of the current players	
+    UpdateCompetdium(Player, PetList, pPetCount); //function call to save the information of the current players
 }
-*/
-
 
 
 /**
@@ -407,7 +550,7 @@ void PrintMatchResults(int BattleGrid[][3]){
 * @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
 * @param num is the number that the function will check to see if it aligns horizontally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
 * @return the amount of horizontal wins
-* @pre grid already stores the result of the battle between the two players
+* @pre grid already stores the result of the battle between the two players and num is either 1 or 2
 */
 int Horizontal(int grid[][3], int num){
   int x, z = 0;
@@ -427,7 +570,7 @@ int Horizontal(int grid[][3], int num){
 * @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
 * @param num is the number that the function will check to see if it aligns vertically. The num variable changes depending on the player (1 for player 1, 2 for player 2)
 * @return the amount of vertical wins
-* @pre grid already stores the result of the battle between the two players
+* @pre grid already stores the result of the battle between the two players and num is either 1 or 2
 */
 int Vertical(int grid[][3], int num){
   	int x, z = 0;
@@ -447,7 +590,7 @@ int Vertical(int grid[][3], int num){
 * @param grid[][] is an int array storing the result of the battle between player 1 and player 2 in each cell (1 - player 1 wins, 2 - player 2 wins, 0 - draw)
 * @param num is the number that the function will check to see if it aligns diagonally. The num variable changes depending on the player (1 for player 1, 2 for player 2)
 * @return the amount of diagonal wins
-* @pre grid already stores the result of the battle between the two players
+* @pre grid already stores the result of the battle between the two players and num is either 1 or 2
 */
 int Diagonal(int grid[][3], int num){
 	int z = 0;
