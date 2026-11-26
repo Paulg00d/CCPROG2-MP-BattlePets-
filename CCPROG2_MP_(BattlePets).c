@@ -5,43 +5,30 @@
  * Author/s : Pioc, Thomas Gabriel
  * 			  Buena, Jester Paul
  * Section : S20E
- * Last Modified : <25 November, 2026>
+ * Last Modified : <27 November, 2026>
  * Acknowledgments : Gemini: used for assistance in answering questions about code concerns, Claude: used for assistance in answering questions about code concerns
  */
 
 
 #include <stdio.h>
 #include <string.h>
-#include "BattlePetsFunctions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
+#include "CCPROG2_MP_(BattlePets)_Functions.h"//header file containing the function definition of the functions in BattlePetsFunctions.c
 
 int main(){
 	FILE *fp;//opens the txt file competdium.txt to read all of its contents
 	int nChoice;//int variable to store the choice of the player
-	int nPetCount = 0, nPlayerCount = 0, i = 0;
+	int nPetCount, nPlayerCount;
 	Grid PetList[MAX_PETS];//array of structs, with each struct containing relevant information of each pet
 	PlayerInfo Player[PLAYERS];//array of structs, with each struct containing the username and roster of the player
 	PlayerInfo PlayerList[MAX_PLAYERS];
 	
-	fp = fopen("competdium.txt", "r");
 	
-	//this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
-	while(fscanf(fp, "%s", PetList[nPetCount].szPetName) == 1 && i < MAX_PETS){
-    	fscanf(fp, "%s", PetList[nPetCount].szElement); //reads the element of the pet
-    	fgets(PetList[i].Buffer, sizeof(PetList[nPetCount].Buffer), fp); //gets the '\n' character found after the element
-		fgets(PetList[i].szDescription, sizeof(PetList[nPetCount].szDescription), fp); //reads the description of the pet
-		int length  = strlen(PetList[nPetCount].szDescription);
-		PetList[nPetCount].szDescription[length - 1] = '\0';
-		fscanf(fp, "%d", &PetList[nPetCount].nMatchCount); //reads the match count of the pet
-		nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
-    }
     
-    fclose(fp);
-    
-	
 	printf("WELCOME TO BATTLEPETS!\n");
 	//this do-while loop executes for as long as nChoice != 0
 	do{
-    	if((fp = fopen("players.txt", "r")) != NULL){
+		nPlayerCount = 0;
+		if((fp = fopen("players.txt", "r")) != NULL){
     		while(fscanf(fp, "%s", PlayerList[nPlayerCount].szPlayerName) == 1 && nPlayerCount < MAX_PLAYERS){
 	  			fscanf(fp, "%d", &PlayerList[nPlayerCount].nWin);
 	  			fscanf(fp, "%d", &PlayerList[nPlayerCount].nLoss);
@@ -49,7 +36,24 @@ int main(){
 	  			nPlayerCount++;
 			}
 		}
+		
 		fclose(fp);
+		
+		nPetCount = 0;
+		
+		fp = fopen("competdium.txt", "r");
+		//this while loop executes for as long as it can read the pet name found in competdium.txt into PetList
+		while(fscanf(fp, "%s", PetList[nPetCount].szPetName) == 1 && nPetCount < MAX_PETS){
+	    	fscanf(fp, "%s", PetList[nPetCount].szElement); //reads the element of the pet
+	    	fgets(PetList[nPetCount].Buffer, sizeof(PetList[nPetCount].Buffer), fp); //gets the '\n' character found after the element
+			fgets(PetList[nPetCount].szDescription, sizeof(PetList[nPetCount].szDescription), fp); //reads the description of the pet
+			int length  = strlen(PetList[nPetCount].szDescription); //gets the string length of the description (including the '\n' characters)
+			PetList[nPetCount].szDescription[length - 1] = '\0'; //replaces '\n' with '\0'
+			fscanf(fp, "%d", &PetList[nPetCount].nMatchCount); //reads the match count of the pet
+			nPetCount++; //increments nPetCount (which represents the number of pets printed) every time all the information of a pet have been successfully read
+	    }
+	    
+	    fclose(fp);
 		
 		printf("+------------------------------------+\n");
 		printf("|            Choose Here             |\n");
@@ -69,7 +73,7 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu(PetList, PlayerList, Player, &nPetCount, &nPlayerCount);
+					BattleMenu(PetList, PlayerList, Player, &nPetCount, nPlayerCount);
 					break;
 				case 2:
 					PrintAddDeleteEditComp(PetList, &nPetCount);
