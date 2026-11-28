@@ -28,21 +28,24 @@ typedef struct {
 	Roster PokeRoster[3][3]; //the 3x3 roster of the player
 }PlayerInfo;
 
-void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], int *pPetCount, int nPlayerCount);
+void BattleMenu(Grid PetList[], PlayerInfo PlayerList[], PlayerInfo Player[], int nPetCount, int nPlayerCount);
 void SaveMatchResults(PlayerInfo Player[], int BattleGrid[][3]);
-void UpdateCompetdium(PlayerInfo Player[], Grid PetList[], int *pPetCount);
+void UpdateCompetdium(PlayerInfo Player[], Grid PetList[], int nPetCount);
 void SavePlayerResults(PlayerInfo Player[], PlayerInfo PlayerList[], int nPlayerCount);
-void LoadRoster(Grid PetList[], PlayerInfo Player[], int *pPetCount, int nCurrentPlayer);
-void Battle(Grid PetList[], int *pPetCount, PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name, int nPlayerCount);
+void LoadRoster(Grid PetList[], PlayerInfo Player[], int nPetCount, int nCurrentPlayer);
+void Battle(Grid PetList[], int nPetCount, PlayerInfo Player[], PlayerInfo PlayerList[], Roster Player1Roster[][3], Roster Player2Roster[][3], char *Player1name, char *Player2name, int nPlayerCount);
 int Horizontal(int grid[][3], int num);
 int Vertical(int grid[][3], int num);
 int Diagonal(int grid[][3], int num);
 
-void PrintAddDeleteEditComp(Grid PetList[], int *pPetCount);
-void PrintBattlePets(Grid PetList[], int *pPetCount);
-void EditBattlePets(Grid PetList[], int *pPetCount);
+void CompetdiumMenu(Grid PetList[], int nPetCount);
+void PrintBattlePets(Grid PetList[], int nPetCount);
+void EditBattlePets(Grid PetList[], int nPetCount);
 void AddBattlePets(Grid PetList[], int *pPetCount);
 void DeleteBattlePets(Grid PetList[], int *pPetCount);
-void SaveRoster();
+void SaveRoster(Grid PetList[], int nPetCount);
+
+void StatisticsMenu(Grid PetList[], PlayerInfo PlayerList[], int nPetCount, int nPlayerCount);
+void SelectionSort(Grid PetList[], PlayerInfo PlayerList[], int nPetCount, int nPlayerCount);
 
 #endif
