@@ -2,7 +2,7 @@
 #include <string.h>
 #include "CCPROG2_MP_(BattlePets)_Functions.h"
 
-void PrintAddDeleteEditComp(Grid PetList[], int *pPetCount){
+void CompetdiumMenu(Grid PetList[], int nPetCount){
 	int nChoice;
 	
 	do{
@@ -28,25 +28,27 @@ void PrintAddDeleteEditComp(Grid PetList[], int *pPetCount){
 		if(nChoice != 0){
 			switch(nChoice){
 			case 1:
-				PrintBattlePets(PetList, pPetCount);
+				PrintBattlePets(PetList, nPetCount);
 				break;
 			
 			case 2:
-				AddBattlePets(PetList, pPetCount);
+				PrintBattlePets(PetList, nPetCount);
+				AddBattlePets(PetList, &nPetCount);
 				break;
 		
 			case 3:
-				PrintBattlePets(PetList, pPetCount);
-				EditBattlePets(PetList, pPetCount);
+				PrintBattlePets(PetList, nPetCount);
+				EditBattlePets(PetList, nPetCount);
 				break;
 			
 			case 4:
-				DeleteBattlePets(PetList, pPetCount);
+				PrintBattlePets(PetList, nPetCount);
+				DeleteBattlePets(PetList, &nPetCount);
 				break;
 				
 			case 5:
-				PrintBattlePets(PetList, pPetCount);
-				SaveRoster();
+				PrintBattlePets(PetList, nPetCount);
+				SaveRoster(PetList, nPetCount);
 				break;
 			}
 		}
@@ -58,8 +60,8 @@ void PrintAddDeleteEditComp(Grid PetList[], int *pPetCount){
  * @param PetList is an array of structs containing the information 
  * @pre Player1Roster and Player2Roster already have the relevant pet information each, and Player1Name and Player2Name already contain the names of the players, nPlayerCount is at least 0
  */
-void PrintBattlePets(Grid PetList[], int *pPetCount){
-	for(int i = 0; i < *pPetCount && i < MAX_PETS; i++){
+void PrintBattlePets(Grid PetList[], int nPetCount){
+	for(int i = 0; i < nPetCount && i < MAX_PETS; i++){
 		printf("%d.\n", i + 1);
 		printf("Name: %s\n", PetList[i].szPetName);
 		printf("Element: %s\n", PetList[i].szElement);
@@ -71,14 +73,27 @@ void PrintBattlePets(Grid PetList[], int *pPetCount){
 void AddBattlePets(Grid PetList[], int *pPetCount){
 	int nRemainingPets = MAX_PETS - *pPetCount;
 	int nChoice;
+	int nSameName;
+	char szTempName[37];
 	char cBuffer;
 	FILE *fp;
 	
 	do{
 		printf("|---%d more pets can be added to Competdium---|\n", nRemainingPets);
 		printf("|---There are now %d pets in Competdium---|\n", *pPetCount);
-		printf("Enter the name: ");
-		scanf("%s", PetList[*pPetCount].szPetName);
+		do{
+			nSameName = 0;
+			printf("Enter the name: ");
+			scanf("%s", szTempName);
+			
+			for(int j = 0; j < *pPetCount; j++)
+				if(strcmp(szTempName, PetList[j].szPetName) == 0)
+					nSameName = 1;
+					
+			if(nSameName)
+				printf("This pet already exists.\n");
+		}while(nSameName);
+		strcpy(PetList[*pPetCount].szPetName, szTempName);
 		scanf("%c", &cBuffer);
 		printf("Enter the element: ");
 		scanf("%s", PetList[*pPetCount].szElement);
@@ -106,10 +121,12 @@ void AddBattlePets(Grid PetList[], int *pPetCount){
 	fclose(fp);
 }
 
-void EditBattlePets(Grid PetList[], int *pPetCount){
+void EditBattlePets(Grid PetList[], int nPetCount){
 	FILE *fp;
 	int nChoice;
 	int index;
+	int nSameName;
+	char szTempName[37];
 	char cBuffer;
 	
 	do{
@@ -124,10 +141,21 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 		scanf("%c", &cBuffer);
 		if(nChoice == 1){
 			printf("Current name: %s\n",PetList[index].szPetName);
-			printf("New name: ");
-			scanf("%s", PetList[index].szPetName);
+			do{
+				nSameName = 0;
+				printf("New name: ");
+				scanf("%s", szTempName);
+			
+				for(int j = 0; j < nPetCount; j++)
+					if(strcmp(szTempName, PetList[j].szPetName) == 0)
+						nSameName = 1;
+					
+				if(nSameName)
+					printf("There is already a pet with this name.\n");
+			}while(nSameName);
+			
+			strcpy(PetList[index].szPetName, szTempName);
 		}
-		
 		printf("Do you wish to edit its element? (1 - yes, 2 - no)\n");
 		printf("> ");
 		scanf("%d", &nChoice);
@@ -154,7 +182,7 @@ void EditBattlePets(Grid PetList[], int *pPetCount){
 	}while(nChoice == 1);
 	
 	fp = fopen("competdium.txt", "w");
-	for(int i = 0; i < *pPetCount && i < MAX_PETS; i++){
+	for(int i = 0; i < nPetCount && i < MAX_PETS; i++){
 		fprintf(fp, "%s\n", PetList[i].szPetName);
 		fprintf(fp, "%s\n", PetList[i].szElement);
 		fprintf(fp, "%s\n", PetList[i].szDescription);
@@ -171,7 +199,7 @@ void DeleteBattlePets(Grid PetList[], int *pPetCount){
 	FILE *fp = fopen("competdium.txt", "w");
 	
 	do{
-		PrintBattlePets(PetList, pPetCount);
+		PrintBattlePets(PetList, *pPetCount);
 		
 		printf("Enter the number corresponding to the pokemon you wish to delete: ");
 		scanf("%d", &nNum);
@@ -200,15 +228,15 @@ void DeleteBattlePets(Grid PetList[], int *pPetCount){
 	fclose(fp);
 }
 
-
-
-void SaveRoster(){
+void SaveRoster(Grid PetList[], int nPetCount){
+	int nItemNum = 1;
+	char szPetOfChoice[37];
 	char playername[37];
 	char filename[54] = "saved_roster.";
 	Grid TempRoster[3][3];
 	
 	printf("Please input player name: ");
-	scanf("%s",playername);
+	scanf("%s", playername);
 	strcat(filename, playername);
 	strcat(filename, ".txt");
 	
@@ -216,8 +244,36 @@ void SaveRoster(){
 	
 	for(int i = 0; i < 3; i++){
 		for(int j = 0; j < 3; j++){
-			printf("Please input pokemon: ");
-			scanf("%s", TempRoster[i][j].szPetName);
+			int nIsSame;
+			do{
+				int nPetFound;
+				do{//this do-while loop executes until the int variable nPetFound == 1 to make sure the user enters the pet name found in competdium
+					nPetFound = 0;
+					printf("%d > ", nItemNum);
+					scanf("%s", szPetOfChoice);//accepts the name of the pet with the string variable szPetOfChoice
+					for(int n = 0; n < nPetCount; n++)
+						if(strcmp(PetList[n].szPetName, szPetOfChoice) == 0)
+							nPetFound = 1;
+							
+					if(!nPetFound)//this if statement executes whenever nPetFound == 0 to tell the player the pet is not found in the competdium
+						printf("Pet not found.\n");		
+				}while(!nPetFound);
+				
+				nIsSame = 0;
+				for(int o = 0; o < 3; o++)//this for loop checks if the inputted pet name in szPetOfName is the same as any of the pets in the current player's roster
+					for(int p = 0; p < 3; p++)
+						//this if statement executes whenever szPetOFChoice is the same as any of the pets in the current player's grid
+						if(strcmp(TempRoster[o][p].szPetName, szPetOfChoice) == 0)
+							nIsSame = 1;//the int variable nIsSame evaluates to 1 whenever szPetOfChoice is found to be the same as any pet in the current player's grid	
+				//this if statement executes when nIsSame == 1, or when szPetOfChoice is found to be the same as any of the pets in the current player's grid	
+				if(nIsSame)
+					printf("This pet already exists in this roster.\n");
+				//executetes when nIsSame != 1, or when szPetOfChoice is not found to be the same as any of the pets in the current player's grid, and then szPetOfChoice is put in the current player's gird
+				else{
+					strcpy(TempRoster[i][j].szPetName, szPetOfChoice);
+					nItemNum++;
+				} 	
+			}while(nIsSame);
 		}
 	}
 	
