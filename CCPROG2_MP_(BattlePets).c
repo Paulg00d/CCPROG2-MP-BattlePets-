@@ -5,10 +5,9 @@
  * Author/s : Pioc, Thomas Gabriel
  * 			  Buena, Jester Paul
  * Section : S20E
- * Last Modified : <27 November, 2026>
+ * Last Modified : <28 November, 2026>
  * Acknowledgments : Gemini: used for assistance in answering questions about code concerns, Claude: used for assistance in answering questions about code concerns
  */
-
 
 #include <stdio.h>
 #include <string.h>
@@ -73,14 +72,15 @@ int main(){
 		if (nChoice != 0){
 			switch(nChoice){
 				case 1:
-					BattleMenu(PetList, PlayerList, Player, &nPetCount, nPlayerCount);
+					BattleMenu(PetList, PlayerList, Player, nPetCount, nPlayerCount);
 					break;
 				case 2:
-					PrintAddDeleteEditComp(PetList, &nPetCount);
+					CompetdiumMenu(PetList, nPetCount);
 					break;
-				/*case 3:
+				case 3:
+					StatisticsMenu(PetList, PlayerList, nPetCount, nPlayerCount);
 					break;
-					*/
+					
 			}
 		}
 	
